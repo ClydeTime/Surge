@@ -1,0 +1,12 @@
+#!name= WPS会员
+#!desc= 会员+稻壳
+#!author= MartinsKing
+
+[Script]
+
+WPS超级会员 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(drive|account)\.wps\.cn\/api\/(users|v3\/(spaces|mine\/vips)),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/WPS/wps.js
+稻壳会员时间 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(client|userinfo)\.docer\.wps\.cn\/(android\/mb\/buy|user\/v1\/vip\_dl\_times),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/WPS/docer-time.js
+WPS稻壳会员 = type=http-request,requires-body=0,pattern=^https?:\/\/.+\.(docer.)?wps.cn\/(download\/v1\/ios|user\/v1\/vip|android\/mb\/buy|partner\/invoke\/usable|(api|rank)\/v1(\/mobile\/mb)?\/detail),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/WPS/docer.js
+
+[MITM]
+hostname = *.docer.wps.cn, vipapi.wps.cn, account.wps.cn, drive.wps.cn
