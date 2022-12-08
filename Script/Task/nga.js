@@ -59,7 +59,6 @@ const config = {
 };
 
 !(async () => {
-  console.log(typeof $request)
   if (typeof $request != "undefined") {
     GetCookie();
     $.done();
