@@ -1,5 +1,5 @@
 #!name=Get cookie. By MartinsKing
-#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅; 您可以在使用后手动将其禁用，以免产生不必要的MITM.
+#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅, NGA; 您可以在使用后手动将其禁用，以免产生不必要的MITM.
 #!system=ios
 
 [Rule]
@@ -13,5 +13,6 @@ B站Cookie(网页) = type=http-request,pattern=^https?:\/\/m.bilibili.com/$,scri
 
 喜马拉雅Cookie = type=http-request,pattern=^https?:\/\/(mobile|mobilehera|mobwsa)\.ximalaya\.com\/app-skin-service\/skin\/,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/xmly.js,requires-body=0
 
+NGA玩家社区Cookie = type=http-request,pattern=^https?:\/\/ngabbs.com\/nuke.php$,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/nga.js,requires-body=1
 [MITM]
-hostname = %APPEND% app.bilibili.com, m.bilibili.com, mobile.ximalaya.com, mobwsa.ximalaya.com, mobilehera.ximalaya.com
+hostname = %APPEND% app.bilibili.com, m.bilibili.com, mobile.ximalaya.com, mobwsa.ximalaya.com, mobilehera.ximalaya.com, ngabbs.com
