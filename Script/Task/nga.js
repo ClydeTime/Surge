@@ -47,9 +47,8 @@ cron "40 8 * * *" script-path=https://raw.githubusercontent.com/ClydeTime/Surge/
 [Plugin]
 # nga获取Cookie 「成功获取Cookie后请禁用插件」
 https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/GetCookie.plugin, tag=MartinsKing签到Cookie, enabled=true
-
-
 */
+
 const $ = new Env("NGA刮墙");
 const name = "nga";
 const config = {
@@ -60,6 +59,7 @@ const config = {
 };
 
 !(async () => {
+  console.log(typeof $request)
   if (typeof $request != "undefined") {
     GetCookie();
     $.done();
@@ -70,11 +70,10 @@ const config = {
 })()
 
 function GetCookie() {
-   console.log(JSON.stringify($request))
   if ($request.body.includes("------WebKitForm")) {
-	const cookie = $request.headers["Cookie"];
-	const contentType = $request.headers["Content-Type"];
-	const userAgent = $request.headers["User-Agent"];
+	const cookie = typeof $request.headers["Cookie"]=='undefined' ? $request.headers["cookie"] : $request.headers["Cookie"];
+	const contentType = typeof $request.headers["Content-Type"]=='undefined' ? $request.headers["content-type"] : $request.headers["Content-Type"];
+	const userAgent = typeof $request.headers["User-Agent"]=='undefined' ? $request.headers["user-agent"] : $request.headers["User-Agent"];
 	const body = $request.body;
 	var obj = FormDataToObject(body, contentType);
   	if (obj["__lib"] === "mission" && obj["__act"] === "get_default") {
