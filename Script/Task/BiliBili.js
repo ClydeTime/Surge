@@ -1,29 +1,31 @@
 /*
 哔哩哔哩签到脚本
 
-更新时间: 2022-11-11
-脚本兼容: QuantumultX, Surge, Loon
+更新时间: 2022-12-30
+脚本兼容: Surge
 脚本作者: MartinsKing
 软件功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到+任务
 注意事项:
   抓取cookie时注意保证账号登录状态；
   账号内须有一定数量的关注数，否则无法完成投币；
   当硬币不足5枚，提示硬币不足，停止投币；
-  长期使用脚本存在多次投币同一视频的现象，导致投币失败，手动执行或尽量多关注UP即可。
-  Loon特别注意:
-    MitM不要勾选MITM over HTTP/2,否则脚本无法正确执行,如必要请获取Cookie成功后再勾选
+  为保证投币任务成功, 脚本有重试机制, 以确保任务完成, 前提需要你尽可能多的关注Up主，否则会出现无限重试, 无限卡顿的问题.（原因就是执行脚本次数过多后, 关注的Up主视频都被投过币了, 找不到未被投币的视频）
 使用声明: ⚠️此脚本仅供学习与交流，请勿贩卖！⚠️
 脚本参考: Nobyda、Wyatt1026、ABreadTree、chavyleung
 特别鸣谢: tg用户「🐈🐈‍⬛🐈‍⬛整点猫咪️」提供Surge供测试, 频道链接「https://t.me/GetsomeCats」
 ************************
-QX, Surge, Loon说明：
+Surge说明：
 ************************
-获取cookie
+1.获取cookie
   ①后台退出手机B站客户端的情况下，重新打开APP进入主页
   ②通过网址[https://www.bilibili.com]登录，不支持请求桌面网站。
 如通知成功获取cookie, 则可以使用此签到脚本.
 获取Cookie后, 请将Cookie脚本禁用并移除主机名, 以免产生不必要的MITM.
 脚本将在每天上午8点30执行, 您可以修改执行时间.
+2.投币设置
+定时任务脚本投币规则为: 随机获取关注列表Up主视频, 默认5视频5硬币, 不点赞.
+用户如需要不投币的版本, 请使用boxjs订阅「https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/boxjs.json」
+将投币次数置为0, 并保存即可.
 /***********************
 Surge 脚本配置:
 ************************
@@ -34,31 +36,8 @@ B站每日等级任务 = type=cron,cronexp=30 8 * * *,script-path=https://raw.gi
 # BiliBili获取Cookie 「请在模块中添加,成功获取Cookie后模块应去除勾选」
 https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/GetCookie.sgmodule
 
-************************
-QuantumultX 远程脚本配置:
-************************
-
-[task_local]
-# B站每日等级任务
-30 8 * * * https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/BiliBili.js, tag=B站每日等级任务, img-url=https://raw.githubusercontent.com/HuiDoY/Icon/main/mini/Color/bilibili.png, enabled=true
-
-[rewrite_remote]
-# B站获取Cookie 「成功获取Cookie后请去除勾选」
-https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/Remote_Cookie.conf, tag=MartinsKing签到Cookie, update-interval=172800, opt-parser=false, enabled=true
-
-************************
-Loon 远程脚本配置:
-************************
-
-[Script]
-# BiliBili每日等级任务
-cron "30 8 * * *" script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/BiliBili.js, tag=BiliBili每日等级任务
-
-[Plugin]
-# BiliBili获取Cookie 「成功获取Cookie后请禁用插件」
-https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/GetCookie.plugin, tag=MartinsKing签到Cookie, enabled=true
-
 */
+
 
 const format = (ts, fmt = 'yyyy-MM-dd HH:mm:ss') => {
   return $.time(fmt, ts);
@@ -135,10 +114,21 @@ async function signBiliBili() {
   config.score = $.getjson(name + "_score", {});
   config.key = $.getdata(name + "_key");
   config.cookie = cookie2object(config.headers.Cookie);
+
   await queryStatus();
   if (config.cookie && (await me())) {
     var flag = true;
-    if (config.user.num < 1 || config.watch.num < 1 || config.share.num < 1 || config.coins.num < 50) {
+
+    let exec_times = $.getdata(name + "_exec"); //实际执行次数
+    let real_times = 0;                         //需要执行总数
+    if (exec_times == "" || typeof exec_times == 'undefined') {
+      real_times = 5;
+      exec_times = 5 - (config.coins.num / 10);
+    } else {
+      real_times = exec_times;
+      exec_times = exec_times - (config.coins.num / 10);
+    }
+    if (config.user.num < 1 || config.watch.num < 1 || config.share.num < 1 || config.coins.num < real_times * 10) {
       flag = false;
     }
     if (!flag){
@@ -151,7 +141,7 @@ async function signBiliBili() {
       }else{
         console.log("- 获取视频失败，请重试或寻求帮助");
       }
-      let exec_times = 5 - (config.coins.num / 10);
+      
       if (config.user.money < 1) {
         console.log("#### 投币任务");
         console.log("- 硬币不足, 投币失败");
@@ -185,7 +175,7 @@ async function signBiliBili() {
       await vipScoreMovie();
     }
     
-    if (config.user.num < 1 || config.watch.num < 1 || config.share.num < 1 || config.coins.num < 50) {
+    if (config.user.num < 1 || config.watch.num < 1 || config.share.num < 1 || config.coins.num < real_times * 10) {
       flag = false;
     } else {
       flag = true;
@@ -345,7 +335,7 @@ async function coin(){
         };
         //console.log("- 正在投币");
         return await $.http.post(myRequest).then(
-          (response) => {
+          async (response) => {
             const body = JSON.parse(response.body);
             if (body.code == 0 && body.message == 0) {
               console.log("- 投币成功");
@@ -354,8 +344,9 @@ async function coin(){
               $.setdata(JSON.stringify(config.coins), name + "_coins");
               return true;
             } else {
-              console.log("- 投币失败");
-              console.log("- 失败原因 " + body.message);             
+              console.log("- 投币失败, 失败原因 " + body.message);
+              console.log("- 正在重试...")
+              await coin();         
               return false;
             }
           }, (reason) =>  {
@@ -709,10 +700,7 @@ async function share(aid, bvid) {
   if (check("share")) {
     console.log(`- 正在分享(${aid},${bvid}) ${config.share?.time || ""}`);
     const url = "https://api.bilibili.com/x/web-interface/share/add";
-    const headers = {
-      "cookie": `DedeUserID=${config.cookie.DedeUserID}; DedeUserID__ckMd5=${config.cookie.DedeUserID__ckMd5}; SESSDATA=${config.cookie.SESSDATA}; bili_jct=${config.cookie.bili_jct}; sid=${config.cookie.sid}`,
-      "referrer": `https://www.bilibili.com/video/${bvid}`
-    };
+    const headers = {};
     const body = `aid=${aid}&csrf=${config.cookie.bili_jct}`;
     const myRequest = {
         url: url,
