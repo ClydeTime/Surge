@@ -1,0 +1,9 @@
+#!name= 酷我音乐破解
+#!desc= 解锁VIP【广告➕VIP➕数字➕下载】
+#!author= MartinsKing
+
+[Script]
+酷我破解 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/.*\.(kuwo|lrts)\.(cn|me)\/(a\.p|music\.pay|viptab|(vip\/(v2|enc)\/(theme|user\/vip|userbase\/vip\?op\=getMCInfo))|(EcomResource|(Mobile)?Ad)Serv(er|ice)).*,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/KWYY/kwyy_crack.js
+
+[MITM]
+hostname = %APPEND% *.kuwo.cn, *.lrts.me
