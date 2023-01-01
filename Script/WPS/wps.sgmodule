@@ -9,4 +9,4 @@ WPS超级会员 = type=http-response,requires-body=1,max-size=0,pattern=^https?:
 WPS稻壳会员 = type=http-request,requires-body=0,pattern=^https?:\/\/.+\.(docer.)?wps.cn\/(download\/v1\/ios|user\/v1\/vip|android\/mb\/buy|partner\/invoke\/usable|(api|rank)\/v1(\/mobile\/mb)?\/detail),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/WPS/docer.js
 
 [MITM]
-hostname = *.docer.wps.cn, vipapi.wps.cn, account.wps.cn, drive.wps.cn
+hostname = %APPEND% *.docer.wps.cn, vipapi.wps.cn, account.wps.cn, drive.wps.cn
