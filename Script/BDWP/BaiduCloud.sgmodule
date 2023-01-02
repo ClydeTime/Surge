@@ -1,0 +1,9 @@
+#!name= 百度网盘优化
+#!desc= 解锁在线视频倍率/清晰度/皮肤/头像框/会员等级
+#!author= NobyDa, MartinsKing
+
+[Script]
+百度网盘优化 = type=http-response,requires-body=1,max-size=0,pattern=^https:\/\/pan\.baidu\.com\/((rest\/\d\.\d\/membership\/(volume|product|user))|cms\/config\?method=query|act\/v2\/skin\/(userset|inuse)|api\/user\/getinfo|wap\/vip\/memberChannel).*,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/BDWP/BaiduCloud.js
+
+[MITM]
+hostname = %APPEND% pan.baidu.com
