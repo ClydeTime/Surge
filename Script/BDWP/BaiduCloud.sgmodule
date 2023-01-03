@@ -1,9 +1,16 @@
-#!name= 百度网盘优化
-#!desc= 解锁在线视频倍率/清晰度/皮肤/头像框/会员等级
-#!author= NobyDa, MartinsKing
+#!name=百度网盘优化
+#!desc=解锁在线视频倍率/清晰度/皮肤/头像框/会员等级
+#!original author: NobyDa
+#!modified by: MartinsKing
 
 [Script]
-百度网盘优化 = type=http-response,requires-body=1,max-size=0,pattern=^https:\/\/pan\.baidu\.com\/((rest\/\d\.\d\/membership\/(volume|product|user))|cms\/config\?method=query|act\/v2\/skin\/(userset|inuse)|api\/user\/getinfo|wap\/vip\/memberChannel).*,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/BDWP/BaiduCloud.js
+BaiduCloud = type=http-response,pattern=^https:\/\/pan\.baidu\.com\/((rest\/\d\.\d\/membership\/(volume|product|user))|cms\/config\?method=query|act\/v2\/skin\/(userset|inuse)|api\/user\/getinfo|wap\/vip\/memberChannel).*,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/BaiduCloud.js,script-update-interval=0
+
+[MapLocal]
+^https?:\/\/pan\.baidu\.com\/act\/v\d\/bchannel\/list data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"
+^https?:\/\/pan\.baidu\.com\/act\/v\d\/welfare\/list data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"
+^https?:\/\/pan\.baidu\.com\/rest\/2\.0\/pcs\/ad data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"
+^https?:\/\/pan\.baidu\.com\/act\/api\/activityentry data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"
 
 [MITM]
 hostname = %APPEND% pan.baidu.com
