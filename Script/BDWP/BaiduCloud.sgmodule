@@ -4,7 +4,7 @@
 #!modified by: MartinsKing
 
 [Script]
-BaiduCloud = type=http-response,pattern=^https:\/\/pan\.baidu\.com\/((rest\/\d\.\d\/membership\/(volume|product|user))|cms\/config\?method=query|act\/v2\/skin\/(userset|inuse)|api\/user\/getinfo|wap\/vip\/memberChannel).*,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/BaiduCloud.js,script-update-interval=0
+BaiduCloud = type=http-response,pattern=^https:\/\/pan\.baidu\.com\/((rest\/\d\.\d\/membership\/(volume|product|user))|cms\/config\?method=query|act\/v2\/skin\/(userset|inuse)|api\/user\/getinfo|wap\/vip\/memberChannel).*,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/BDWP/BaiduCloud.js,script-update-interval=0
 
 [MapLocal]
 ^https?:\/\/pan\.baidu\.com\/act\/v\d\/bchannel\/list data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-200.txt"
