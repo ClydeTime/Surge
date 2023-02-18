@@ -29,7 +29,7 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 [Script]
 喜马拉雅会员 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile|mobilehera|mobwsa|mwsa|m|ar)\.ximalaya\.com\/(mobile\/(v\d\/album\/track|album\/paid\/info)|nyx\/history\/query\/detail|starwar\/task|vip\/(check|tabs|v\d\/recommand)|mobile-(user|album\/album\/page|playpage\/(playpage\/(tabs|recommendInfo)|track))|product\/(promotion|detail\/v1\/basicInfo)|business-vip-|(playlist|rec-association\/recommend)\/album),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 #喜马拉雅共享 = type=http-request,requires-body=0,max-size=0,pattern=^https?:\/\/(mobile|mobilehera|mobwsa|pns)\.ximalaya\.com\/(mobile-playpage|mobile\/(quickplay|acceptapn)|comment-mobile/get|sound-guide-portal\/(sound\/guide|display)),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly_crack.js
-#喜马拉雅去轮盘广告 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile|mobilehera|mobwsa)\.ximalaya\.com\/focus-mobile\/focusPic\/info,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/noFocusAd.js
+喜马拉雅去轮盘广告 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile|mobilehera|mobwsa)\.ximalaya\.com\/focus-mobile\/focusPic\/info,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/noFocusAd.js
 
 [MITM]
 hostname = %APPEND% *.ximalaya.com
