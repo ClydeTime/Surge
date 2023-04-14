@@ -1,0 +1,10 @@
+#!name=腾讯视频会员签到
+#!desc=每天腾讯视频自动签到
+# 任务奖励：经验值
+# 脚本作者：MartinsKing（@ClydeTime）
+# ================ Boxjs订阅 ================
+# 订阅地址：https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/boxjs/boxjs.json
+# 更新时间：2023-04-14
+
+[Script]
+腾讯视频签到任务 = type=cron,cronexp=0 5 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/videoqq.js,timeout=15,wake-system=1
