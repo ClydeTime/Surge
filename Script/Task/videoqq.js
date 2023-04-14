@@ -31,7 +31,7 @@ Surge 远程脚本配置:
 https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/GetCookie.sgmodule
 
 ************************
-SurgeX 远程脚本配置:
+QuantumultX 远程脚本配置:
 ************************
 
 [task_local]
