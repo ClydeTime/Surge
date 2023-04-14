@@ -1,0 +1,7 @@
+#!name=喜马拉雅积分任务
+#!desc=每天自动获取喜马拉雅积分
+# 脚本作者：MartinsKing（@ClydeTime）
+# 更新时间：2023-04-14
+
+[Script]
+喜马拉雅签到任务 = type=cron,cronexp=35 8 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/xmly.js,timeout=15,wake-system=1
