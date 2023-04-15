@@ -1,8 +1,8 @@
 /*
 哔哩哔哩签到脚本
 
-更新时间: 2023-01-03
-脚本兼容: Surge
+更新时间: 2023-04-15
+脚本兼容: QuantumultX, Surge, Loon
 脚本作者: MartinsKing
 软件功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到+任务等
 注意事项:
@@ -10,11 +10,13 @@
   账号内须有一定数量的关注数，否则无法完成投币；
   当硬币不足5枚，提示硬币不足，停止投币；
   为保证投币任务成功, 脚本有重试机制, 以确保任务完成, 前提需要你尽可能多的关注Up主，否则会出现无限重试, 无限卡顿的问题.（原因就是执行脚本次数过多后, 关注的Up主视频都被投过币了, 找不到未被投币的视频）
+  Loon特别注意:
+    MitM不要勾选MITM over HTTP/2,否则脚本无法正确执行,如必要请获取Cookie成功后再勾选
 使用声明: ⚠️此脚本仅供学习与交流，请勿贩卖！⚠️
 脚本参考: Nobyda、Wyatt1026、ABreadTree、chavyleung
 特别鸣谢: tg用户「🐈🐈‍⬛🐈‍⬛整点猫咪️」提供Surge供测试, 频道链接「https://t.me/GetsomeCats」
 ************************
-Surge说明：
+QX, Surge, Loon说明：
 ************************
 1.获取cookie
   ①后台退出手机B站客户端的情况下，重新打开APP进入主页
@@ -24,7 +26,7 @@ Surge说明：
 脚本将在每天上午8点30执行, 您可以修改执行时间, 但是注意不要在凌晨执行, 否则部分任务可能无法完成(非脚本问题, 可能与B站服务器有关)
 2.投币设置
 定时任务脚本投币规则为: 随机获取关注列表Up主视频, 默认5视频5硬币, 不点赞.
-用户如需要不投币的版本, 请使用boxjs订阅「https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/boxjs.json」
+用户如需要不投币的版本, 请使用boxjs订阅「https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/boxjs/boxjs.json」
 将投币次数置为0, 并保存即可.
 /***********************
 Surge 脚本配置:
@@ -35,6 +37,30 @@ B站每日等级任务 = type=cron,cronexp=30 8 * * *,script-path=https://raw.gi
 
 # BiliBili获取Cookie 「请在模块中添加,成功获取Cookie后模块应去除勾选」
 https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/GetCookie.sgmodule
+
+************************
+QuantumultX 远程脚本配置:
+************************
+
+[task_local]
+# B站每日等级任务
+30 8 * * * https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Task/BiliBili.js, tag=B站每日等级任务, img-url=https://raw.githubusercontent.com/HuiDoY/Icon/main/mini/Color/bilibili.png, enabled=true
+
+[rewrite_remote]
+# B站获取Cookie 「成功获取Cookie后请去除勾选」
+https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Task/Remote_Cookie.conf, tag=MartinsKing签到Cookie, update-interval=172800, opt-parser=false, enabled=true
+
+************************
+Loon 远程脚本配置:
+************************
+
+[Script]
+# BiliBili每日等级任务
+cron "30 8 * * *" script-path=https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Task/BiliBili.js, tag=BiliBili每日等级任务
+
+[Plugin]
+# BiliBili获取Cookie 「成功获取Cookie后请禁用插件」
+https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Task/GetCookie.plugin, tag=MartinsKing签到Cookie, enabled=true
 
 */
 
@@ -345,8 +371,12 @@ async function coin(){
               return true;
             } else {
               console.log("- 投币失败, 失败原因 " + body.message);
-              console.log("- 正在重试...")
-              await coin();         
+              config.coins.failures = (config.coins.failures ==0 || typeof config.coins.failures=='undefined' ? 1 : config.coins.failures) + 1;
+              $.setdata(JSON.stringify(config.coins), name + "_coins");
+              if (config.coins.failures < 11) {
+                console.log("- 正在重试...重试次数 " + (config.coins.failures - 1) + "(超过十次不再重试)");
+                await coin();
+              }
               return false;
             }
           }, (reason) =>  {
@@ -740,15 +770,22 @@ async function share(aid, bvid) {
         headers: headers,
         body: body
     };
-    return await $.http.post(myRequest).then((response) => {
-        const data = JSON.parse(response.body);
-        if (data.code == 0) {
+    return await $.http.post(myRequest).then(
+      async (response) => {
+        const body = JSON.parse(response.body);
+        if (body.code == 0) {
           config.share.num = (config.share.num || 0) + 1;
           console.log("- 分享成功");
           return $.setdata(JSON.stringify(config.share), name + "_share");
         } else {
-          console.log("- 分享失败");
-          console.log(`- data ${JSON.stringify(response.body)}`);
+          console.log("- 分享失败, 失败原因" + body.message);
+          config.share.failures = (config.share.failures ==0 || typeof config.share.failures=='undefined' ? 1 : config.share.failures) + 1;
+          $.setdata(JSON.stringify(config.share), name + "_share");
+          if (config.share.failures < 6) {
+            console.log("- 正在重试...重试次数 " + (config.share.failures - 1) + "(超过五次不再重试)");
+            item = config.cards[Math.floor(Math.random() * config.cards.length)];
+            await share(item.desc.rid, item.desc.bvid);
+          }
           return false;
         }
       });
