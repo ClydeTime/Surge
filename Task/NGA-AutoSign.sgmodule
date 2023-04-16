@@ -1,7 +1,7 @@
 #!name=NGA签到
 #!desc=NGA刮墙
 # 脚本作者：MartinsKing（@ClydeTime）
-# 更新时间：2024-04-14
+# 更新时间：2023-04-16
 
 [Script]
 NGA刮墙 = type=cron,cronexp=40 8 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/nga.js
