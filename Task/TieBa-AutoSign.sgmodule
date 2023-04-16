@@ -1,0 +1,7 @@
+#!name=贴吧签到
+#!desc=贴吧自动签到
+# 脚本作者：MartinsKing（@ClydeTime）
+# 更新时间：2023-04-16
+
+[Script]
+贴吧签到 = type=cron,cronexp=0 9 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/TieBa.js,wake-system=1,timeout=15,script-update-interval=0
