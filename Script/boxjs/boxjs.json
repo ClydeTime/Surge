@@ -174,8 +174,7 @@
                             "key": "我的直播",
                             "label": "我的直播"
                         }
-                    ],
-                    "desc": "选择启用的首页标签页，建议不超过7个"
+                    ]
                 },
                 {
                     "id": "@BiliBili.Mine.Settings.Option.Recommend",
@@ -225,8 +224,7 @@
                             "key": "能量加油站",
                             "label": "能量加油站"
                         }
-                    ],
-                    "desc": "选择启用的首页标签页，建议不超过7个"
+                    ]
                 },
                 {
                     "id": "@BiliBili.Mine.Settings.Option.More",
