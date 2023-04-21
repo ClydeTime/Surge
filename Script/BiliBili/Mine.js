@@ -1,4 +1,7 @@
-const $ = new Env("📺 BiliBili:Mine response");
+/*
+README: https://github.com/BiliUniverse/Enhanced
+*/
+const $ = new Env("📺 BiliBili:Enhanced v0.1.4(5) response");
 const URL = new URLs();
 const DataBase = {
 	"Enhanced":{
@@ -13,7 +16,7 @@ const DataBase = {
 			"sections_v2":[{"items":[{"id":396,"title":"离线缓存","icon":"http://i0.hdslb.com/bfs/archive/5fc84565ab73e716d20cd2f65e0e1de9495d56f8.png","common_op_item":{},"uri":"bilibili://user_center/download"},{"id":397,"title":"历史记录","icon":"http://i0.hdslb.com/bfs/archive/8385323c6acde52e9cd52514ae13c8b9481c1a16.png","common_op_item":{},"uri":"bilibili://user_center/history"},{"id":398,"title":"我的收藏","icon":"http://i0.hdslb.com/bfs/archive/d79b19d983067a1b91614e830a7100c05204a821.png","common_op_item":{},"uri":"bilibili://user_center/favourite"},{"id":399,"title":"稍后再看","icon":"http://i0.hdslb.com/bfs/archive/63bb768caa02a68cb566a838f6f2415f0d1d02d6.png","need_login":1,"uri":"bilibili://user_center/watch_later","common_op_item":{}}],"style":1,"button":{}},{"up_title":"创作中心","title":"创作中心","items":[{"need_login":1,"display":1,"id":171,"title":"创作首页","global_red_dot":1,"uri":"bilibili://uper/homevc","icon":"http://i0.hdslb.com/bfs/archive/d3aad2d07538d2d43805f1fa14a412d7a45cc861.png"},{"need_login":1,"display":1,"id":172,"title":"稿件管理","global_red_dot":1,"uri":"bilibili://uper/user_center/archive_list","icon":"http://i0.hdslb.com/bfs/archive/97acb2d8dec09b296a38f7f7093d651947d13b91.png"},{"need_login":1,"display":1,"id":533,"title":"任务中心","global_red_dot":1,"uri":"https://member.bilibili.com/york/mission-center?navhide=1","icon":"http://i0.hdslb.com/bfs/archive/ae18624fd2a7bdda6d95ca606d5e4cf2647bfa4d.png"},{"need_login":1,"display":1,"id":174,"title":"有奖活动","red_dot":1,"global_red_dot":1,"uri":"https://member.bilibili.com/york/hot-activity","icon":"http://i0.hdslb.com/bfs/archive/7f4fa86d99bf3814bf10f8ee5d6c8c9db6e931c8.png"},{"id":709,"title":"开播福利","icon":"https://i0.hdslb.com/bfs/legacy/97a52b64cbd8c099d6520c6be57006c954ec0f5c.png","need_login":1,"uri":"https://live.bilibili.com/p/html/live-anchor-galaxy/task_center/?source_event=16&week_live_btn=1&is_live_full_webview=1#/","display":1},{"id":707,"title":"主播中心","icon":"http://i0.hdslb.com/bfs/feed-admin/48e17ccd0ce0cfc9c7826422d5e47ce98f064c2a.png","need_login":1,"uri":"https://live.bilibili.com/p/html/live-app-anchor-center/index.html?is_live_webview=1#/","display":1},{"id":708,"title":"主播活动","icon":"http://i0.hdslb.com/bfs/feed-admin/5bc5a1aa8dd4bc5d6f5222d29ebaca9ef9ce37de.png","need_login":1,"uri":"https://live.bilibili.com/activity/live-activity-full/activity_center/mobile.html?is_live_webview=1","display":1},{"id":710,"title":"我的直播","icon":"http://i0.hdslb.com/bfs/feed-admin/a9be4fa50ea4772142c1fc7992cde28294d63021.png","need_login":1,"uri":"https://live.bilibili.com/p/html/live-app-center/index.html?is_live_webview=1&foreground=pink&background=white","display":1}],"style":1,"button":{"icon":"http://i0.hdslb.com/bfs/archive/205f47675eaaca7912111e0e9b1ac94cb985901f.png","style":1,"url":"bilibili://uper/user_center/archive_selection","text":"发布"},"type":1},{"title":"推荐服务","items":[{"id":400,"title":"我的课程","icon":"http://i0.hdslb.com/bfs/archive/aa3a13c287e4d54a62b75917dd9970a3cde472e1.png","common_op_item":{},"uri":"https://m.bilibili.com/cheese/mine?navhide=1&native.theme=1&night=0&spm_id_from=main.my-information.0.0.pv&csource=Me_myclass"},{"id":401,"title":"看视频免流量","icon":"http://i0.hdslb.com/bfs/archive/393dd15a4f0a149e016cd81b55bd8bd6fe40882c.png","common_op_item":{},"uri":"bilibili://user_center/free_traffic"},{"id":402,"title":"个性装扮","icon":"http://i0.hdslb.com/bfs/archive/0bcad10661b50f583969b5a188c12e5f0731628c.png","common_op_item":{},"uri":"https://www.bilibili.com/h5/mall/home?navhide=1&f_source=shop"},{"id":423,"title":"邀好友赚红包","icon":"http://i0.hdslb.com/bfs/archive/de39fc8899204a4e5abaab68fa4bd604068ce124.png","common_op_item":{},"uri":"https://www.bilibili.com/blackboard/redpack/activity-8SX5lYqUj.html?from=wode","red_dot_for_new":true},{"id":404,"title":"我的钱包","icon":"http://i0.hdslb.com/bfs/archive/f416634e361824e74a855332b6ff14e2e7c2e082.png","common_op_item":{},"uri":"bilibili://bilipay/mine_wallet"},{"id":403,"title":"游戏中心","icon":"http://i0.hdslb.com/bfs/archive/873e3c16783fe660b111c02ebc4c50279cb5db57.png","common_op_item":{},"uri":"bilibili://game_center/user?sourceFrom=100003"},{"id":622,"title":"会员购中心","icon":"http://i0.hdslb.com/bfs/archive/19c794f01def1a267b894be84427d6a8f67081a9.png","common_op_item":{},"uri":"bilibili://mall/mine?msource=mine"},{"id":514,"title":"社区中心","icon":"http://i0.hdslb.com/bfs/archive/551a39b7539e64d3b15775295c4b2e13e5513b43.png","need_login":1,"uri":"https://www.bilibili.com/blackboard/dynamic/169422","common_op_item":{}},{"id":924,"title":"哔哩哔哩公益","icon":"http://i0.hdslb.com/bfs/feed-admin/a943016e8bef03222998b4760818894ba2bd5c80.png","common_op_item":{},"uri":"https://love.bilibili.com/h5/?navhide=1&c=1"},{"id":990,"title":"能量加油站","icon":"http://i0.hdslb.com/bfs/feed-admin/6acb0cb1f719703c62eb443ba6cf3abfc51164ab.png","common_op_item":{},"uri":"https://www.bilibili.com/blackboard/dynamic/306424"}],"style":1,"button":{}},{"title":"更多服务","items":[{"id":407,"title":"联系客服","icon":"http://i0.hdslb.com/bfs/archive/7ca840cf1d887a45ee1ef441ab57845bf26ef5fa.png","common_op_item":{},"uri":"bilibili://user_center/feedback"},{"id":812,"title":"听视频","icon":"http://i0.hdslb.com/bfs/feed-admin/97276c5df099e516946682edf4ef10dc6b18c7dc.png","common_op_item":{},"uri":"bilibili://podcast","red_dot_for_new":true},{"id":964,"title":"青少年守护","icon":"http://i0.hdslb.com/bfs/feed-admin/90f5920ac351da19c6451757ad71704fcea8192b.png","common_op_item":{},"uri":"https://www.bilibili.com/h5/teenagers/home?navhide=1"},{"id":410,"title":"设置","icon":"http://i0.hdslb.com/bfs/archive/e932404f2ee62e075a772920019e9fbdb4b5656a.png","common_op_item":{},"uri":"bilibili://user_center/setting"}],"style":2,"button":{}}]
 		}
 	},
-    "Global":{
+  "Global":{
 		"Settings":{"Switch":true,"ForceHost":"1","Locales":["CHN","HKG","TWN"],"Proxies":{"CHN":"DIRECT","HKG":"🇭🇰香港","MAC":"🇲🇴澳门","TWN":"🇹🇼台湾"}}
 	},
 	"Roaming":{
@@ -36,12 +39,20 @@ for (const [key, value] of Object.entries($response.headers)) {
 
 /***************** Processing *****************/
 !(async () => {
-    const { Settings, Caches, Configs } = setENV("BiliBili", "Mine", DataBase);
+	let url = URL.parse($request.url);
+	let Settings, Caches, Configs;
+	switch (url.path) {
+			case "x/resource/show/tab/v2": // 首页-Tab
+				({ Settings, Caches, Configs } = setENV("BiliBili", "Enhanced", DataBase));
+				break;
+			case "x/v2/account/mine":  // 我的页面
+				({ Settings, Caches, Configs } = setENV("BiliBili", "Mine", DataBase));
+				break;
+	}
 	switch (Settings.Switch) {
 		case "true":
 		default:
 			$.log(`⚠ ${$.name}, 功能开启`, "");
-			let url = URL.parse($request.url);
 			$.log(`⚠ ${$.name}, url.path=${url.path}`, "");
 			// 设置格式
 			const Format = $response?.headers?.["content-type"]?.split(";")?.[0]
@@ -67,32 +78,58 @@ for (const [key, value] of Object.entries($response.headers)) {
 							};
 							*/
 							switch (url.path) {
-								case "x/v2/account/mine": // 我的页面
+								case "x/resource/show/tab/v2": // 首页-Tab
+									// 顶栏-左侧
+									data.top_left = Configs.Tab.top_left[Settings.Home.Top_left];
+									// 顶栏-右侧
+									data.top = Configs.Tab.top.map(e => {
+										if (Settings.Home.Top.includes(e.tab_id)) return e;
+									}).filter(Boolean).map((e, i) => {
+										e.pos = i + 1;
+										return e;
+									});
+									// 标签栏
+									data.tab = Configs.Tab.tab.map(e => {
+										if (Settings.Home.Tab.includes(e.tab_id)) return e;
+									}).filter(Boolean).map((e, i) => {
+										if (Settings.Home.Tab_default == e.tab_id) e.default_selected = 1;
+										e.pos = i + 1;
+										return e;
+									});
+									// 底部导航栏
+									data.bottom = Configs.Tab.bottom.map(e => {
+										if (Settings.Bottom.includes(e.tab_id)) return e;
+									}).filter(Boolean).map((e,i) => {
+										e.pos = i + 1;
+										return e;
+									});
+									break;
+								case "x/resource/show/tab/bubble": // 首页-Tab-?
+									break;
+								case "x/v2/account/mine":  // 我的页面
 									data.sections_v2 = Configs.sections_v2.map(e => {
 										switch (e.title) {
 											case "创作中心":
 												e.items = e.items.map(m => {
 													if (Settings.Option.CreatorCenter.includes(m.title)) return m;
-												}).filter(Boolean).map(m => { return m; });
-                        if (!e.items.some(() => true)) e = {};
+												}).filter(Boolean).map(m => { return m });
+												if (!e.items.some(() => true)) e = {};
 												break;
 											case "推荐服务":
 												e.items = e.items.map(m => {
 													if (Settings.Option.Recommend.includes(m.title)) return m;
-												}).filter(Boolean).map(m => { return m; });
-                        if (!e.items.some(() => true)) e = {};
+												}).filter(Boolean).map(m => { return m });
+												if (!e.items.some(() => true)) e = {};
 												break;
 											case "更多服务":
 												e.items = e.items.map(m => {
 													if (Settings.Option.More.includes(m.title)) return m;
-												}).filter(Boolean).map(m => { return m; });
-                        if (!e.items.some(() => true)) e = {};
+												}).filter(Boolean).map(m => { return m });
+												if (!e.items.some(() => true)) e = {};
 												break;
 										};
 									return e;
 									});
-									break;
-								case "x/resource/show/tab/bubble": // 首页-Tab-?
 									break;
 							};
 							break;
@@ -160,9 +197,16 @@ function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	let { Settings, Caches, Configs } = getENV(name, platform, database);
 	/***************** Prase *****************/
-	if (typeof Settings.Option.CreatorCenter === "string") Settings.Option.CreatorCenter = Settings.Option.CreatorCenter.split(",") // BoxJs字符串转数组
-	if (typeof Settings.Option.Recommend === "string") Settings.Option.Recommend = Settings.Option.Recommend.split(",") // BoxJs字符串转数组
-	if (typeof Settings.Option.More === "string") Settings.Option.More = Settings.Option.More.split(",") // BoxJs字符串转数
+	if (Settings.hasOwnProperty('Home')) {
+		if (typeof Settings.Home.Top === "string") Settings.Home.Top = Settings.Home.Top.split(",") // BoxJs字符串转数组
+		if (typeof Settings.Home.Top_more === "string") Settings.Home.Top_more = Settings.Home.Top_more.split(",") // BoxJs字符串转数组
+		if (typeof Settings.Home.Tab === "string") Settings.Home.Tab = Settings.Home.Tab.split(",") // BoxJs字符串转数组
+		if (typeof Settings.Bottom === "string") Settings.Bottom = Settings.Bottom.split(",") // BoxJs字符串转数组
+	}else if (Settings.hasOwnProperty('Option')) {
+		if (typeof Settings.Option.CreatorCenter === "string") Settings.Option.CreatorCenter = Settings.Option.CreatorCenter.split(",") // BoxJs字符串转数组
+		if (typeof Settings.Option.Recommend === "string") Settings.Option.Recommend = Settings.Option.Recommend.split(",") // BoxJs字符串转数组
+		if (typeof Settings.Option.More === "string") Settings.Option.More = Settings.Option.More.split(",") // BoxJs字符串转数
+	}
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 	return { Settings, Caches, Configs }
 };
