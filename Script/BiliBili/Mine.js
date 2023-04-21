@@ -77,6 +77,7 @@ for (const [key, value] of Object.entries($response.headers)) {
 												e.items = e.items.map(m => {
 													if (Settings.Option.CreatorCenter.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
+                        if (e.items === []) e = {};
                         console.log(typeof e.items);
                         console.log(e.items);
 												break;
@@ -85,6 +86,7 @@ for (const [key, value] of Object.entries($response.headers)) {
 												e.items = e.items.map(m => {
 													if (Settings.Option.Recommend.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
+                        if (e.items === []) e = {};
                         console.log(e.items);
 												break;
 											case "更多服务":
@@ -92,6 +94,7 @@ for (const [key, value] of Object.entries($response.headers)) {
 												e.items = e.items.map(m => {
 													if (Settings.Option.More.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
+                        if (e.items === []) e = {};
                         console.log(typeof e.items);
 												console.log(e.items);
 												break;
