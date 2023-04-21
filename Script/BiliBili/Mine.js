@@ -68,8 +68,6 @@ for (const [key, value] of Object.entries($response.headers)) {
 							*/
 							switch (url.path) {
 								case "x/v2/account/mine": // 我的页面
-									let sections = [1,2,3];
-
 									data.sections_v2 = Configs.sections_v2.map(e => {
 										switch (e.title) {
 											case "创作中心":
@@ -77,26 +75,22 @@ for (const [key, value] of Object.entries($response.headers)) {
 												e.items = e.items.map(m => {
 													if (Settings.Option.CreatorCenter.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
-                        if (e.items === []) e = {};
-                        console.log(typeof e.items);
-                        console.log(e.items);
+                        if (!e.items.some(() => true)) e = {};
 												break;
 											case "推荐服务":
 												console.log("进入推荐服务");
 												e.items = e.items.map(m => {
 													if (Settings.Option.Recommend.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
-                        if (e.items === []) e = {};
-                        console.log(e.items);
+                        if (!e.items.some(() => true)) e = {};
 												break;
 											case "更多服务":
 												console.log("进入更多服务");
 												e.items = e.items.map(m => {
 													if (Settings.Option.More.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
-                        if (e.items === []) e = {};
-                        console.log(typeof e.items);
-												console.log(e.items);
+                        if (!e.items.some(() => true)) e = {};
+												console.log(e);
 												break;
 										};
 									return e;
