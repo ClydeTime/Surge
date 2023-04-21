@@ -71,26 +71,22 @@ for (const [key, value] of Object.entries($response.headers)) {
 									data.sections_v2 = Configs.sections_v2.map(e => {
 										switch (e.title) {
 											case "创作中心":
-												console.log("进入创作中心");
 												e.items = e.items.map(m => {
 													if (Settings.Option.CreatorCenter.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
                         if (!e.items.some(() => true)) e = {};
 												break;
 											case "推荐服务":
-												console.log("进入推荐服务");
 												e.items = e.items.map(m => {
 													if (Settings.Option.Recommend.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
                         if (!e.items.some(() => true)) e = {};
 												break;
 											case "更多服务":
-												console.log("进入更多服务");
 												e.items = e.items.map(m => {
 													if (Settings.Option.More.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
                         if (!e.items.some(() => true)) e = {};
-												console.log(e);
 												break;
 										};
 									return e;
