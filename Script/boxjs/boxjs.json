@@ -113,6 +113,157 @@
                     "desc": "腾讯视频Request URL"
                 }
             ]
+        },
+        {
+            "id": "BiliBili.Mine",
+            "name": "📺 BiliBili: Mine",
+            "author": "@BiliUniverse",
+            "descs_html":
+            [],
+            "keys":
+            [
+                "@BiliBili.Mine.Settings",
+                "@BiliBili.Mine.Caches"
+            ],
+            "settings":
+            [
+                {
+                    "id": "@BiliBili.Mine.Settings.Switch",
+                    "name": "总功能开关",
+                    "val": true,
+                    "type": "boolean",
+                    "desc": "是否启用此APP修改"
+                },
+                {
+                    "id": "@BiliBili.Mine.Settings.Option.CreatorCenter",
+                    "name": "创作中心",
+                    "val":
+                    [],
+                    "type": "checkboxes",
+                    "items":
+                    [
+                        {
+                            "key": "创作首页",
+                            "label": "创作首页"
+                        },
+                        {
+                            "key": "稿件管理",
+                            "label": "稿件管理"
+                        },
+                        {
+                            "key": "任务中心",
+                            "label": "任务中心"
+                        },
+                        {
+                            "key": "有奖活动",
+                            "label": "有奖活动"
+                        },
+                        {
+                            "key": "开播福利",
+                            "label": "开播福利"
+                        },
+                        {
+                            "key": "主播中心",
+                            "label": "主播中心"
+                        },
+                        {
+                            "key": "主播活动",
+                            "label": "主播活动"
+                        },
+                        {
+                            "key": "我的直播",
+                            "label": "我的直播"
+                        }
+                    ],
+                    "desc": "选择启用的首页标签页，建议不超过7个"
+                },
+                {
+                    "id": "@BiliBili.Mine.Settings.Option.Recommend",
+                    "name": "推荐服务",
+                    "val":
+                    [],
+                    "type": "checkboxes",
+                    "items":
+                    [
+                        {
+                            "key": "我的课程",
+                            "label": "我的课程"
+                        },
+                        {
+                            "key": "看视频免流量",
+                            "label": "看视频免流量"
+                        },
+                        {
+                            "key": "个性装扮",
+                            "label": "个性装扮"
+                        },
+                        {
+                            "key": "邀好友赚红包",
+                            "label": "邀好友赚红包"
+                        },
+                        {
+                            "key": "我的钱包",
+                            "label": "我的钱包"
+                        },
+                        {
+                            "key": "游戏中心",
+                            "label": "游戏中心"
+                        },
+                        {
+                            "key": "会员购中心",
+                            "label": "会员购中心"
+                        },
+                        {
+                            "key": "社区中心",
+                            "label": "社区中心"
+                        },
+                        {
+                            "key": "哔哩哔哩公益",
+                            "label": "哔哩哔哩公益"
+                        },
+                        {
+                            "key": "能量加油站",
+                            "label": "能量加油站"
+                        }
+                    ],
+                    "desc": "选择启用的首页标签页，建议不超过7个"
+                },
+                {
+                    "id": "@BiliBili.Mine.Settings.Option.More",
+                    "name": "更多服务",
+                    "val":
+                    [
+                        "联系客服",
+                        "设置"
+                    ],
+                    "type": "checkboxes",
+                    "items":
+                    [
+                        {
+                            "key": "联系客服",
+                            "label": "联系客服"
+                        },
+                        {
+                            "key": "听视频",
+                            "label": "听视频"
+                        },
+                        {
+                            "key": "青少年守护",
+                            "label": "青少年守护"
+                        },
+                        {
+                            "key": "设置",
+                            "label": "设置"
+                        }
+                    ]
+                }
+            ],
+            "repo": "https://github.com/BiliUniverse/Enhanced",
+            "icons":
+            [
+                "https://github.com/BiliUniverse/Enhanced/raw/main/database/icon_circled_108x.png",
+                "https://github.com/BiliUniverse/Enhanced/raw/main/database/icon_circled_108x.png"
+            ]
         }
     ]
 }
