@@ -68,7 +68,7 @@ for (const [key, value] of Object.entries($response.headers)) {
 							*/
 							switch (url.path) {
 								case "x/v2/account/mine": // 我的页面
-									let sections = new Array();
+									let sections = [];
 									data.sections_v2 = Configs.sections_v2.map(e => {
 										switch (e.title) {
 											case "创作中心":
@@ -76,6 +76,7 @@ for (const [key, value] of Object.entries($response.headers)) {
 												sections = e.items.map(m => {
 													if (Settings.Option.CreatorCenter.includes(m.title)) return m;
 												}).filter(Boolean).map(m => { return m; });
+                        console.log(typeof sections);
                         console.log(sections);
 												break;
 											case "推荐服务":
