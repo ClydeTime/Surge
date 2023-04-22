@@ -176,7 +176,8 @@
                             "key": "710",
                             "label": "我的直播"
                         }
-                    ]
+                    ],
+                    "desc": "白色版本APP不存在此选项"
                 },
                 {
                     "id": "@BiliBili.Enhanced.Settings.Mine.Recommend",
@@ -231,7 +232,8 @@
                             "key": "990",
                             "label": "能量加油站"
                         }
-                    ]
+                    ],
+                    "desc": "白色版本APP不存在此选项"
                 },
                 {
                     "id": "@BiliBili.Enhanced.Settings.Mine.More",
@@ -266,11 +268,11 @@
                         },
                         {
                             "key": "741",
-                            "label": "我的钱包（白B）"
+                            "label": "我的钱包（白色版）"
                         },
                         {
                             "key": "742",
-                            "label": "稿件管理（白B）"
+                            "label": "稿件管理（白色版）"
                         }
                     ]
                 }
