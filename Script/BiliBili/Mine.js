@@ -193,23 +193,43 @@ for (const [key, value] of Object.entries($response.headers)) {
  * @param {Object} database - Default DataBase
  * @return {Object} { Settings, Caches, Configs }
  */
-function setENV(name, platform, database) {
+// function setENV(name, platform, database) {
+// 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
+// 	let { Settings, Caches, Configs } = getENV(name, platform, database);
+// 	/***************** Prase *****************/
+// 	if (Settings.hasOwnProperty('Home')) {
+// 		if (typeof Settings.Home.Top === "string") Settings.Home.Top = Settings.Home.Top.split(",") // BoxJs字符串转数组
+// 		if (typeof Settings.Home.Top_more === "string") Settings.Home.Top_more = Settings.Home.Top_more.split(",") // BoxJs字符串转数组
+// 		if (typeof Settings.Home.Tab === "string") Settings.Home.Tab = Settings.Home.Tab.split(",") // BoxJs字符串转数组
+// 		if (typeof Settings.Bottom === "string") Settings.Bottom = Settings.Bottom.split(",") // BoxJs字符串转数组
+// 	}else if (Settings.hasOwnProperty('Option')) {
+// 		if (typeof Settings.Option.CreatorCenter === "string") Settings.Option.CreatorCenter = Settings.Option.CreatorCenter.split(",") // BoxJs字符串转数组
+// 		if (typeof Settings.Option.Recommend === "string") Settings.Option.Recommend = Settings.Option.Recommend.split(",") // BoxJs字符串转数组
+// 		if (typeof Settings.Option.More === "string") Settings.Option.More = Settings.Option.More.split(",") // BoxJs字符串转数
+// 	}
+// 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
+// 	return { Settings, Caches, Configs }
+// };
+function setEnv(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
-	let { Settings, Caches, Configs } = getENV(name, platform, database);
 	/***************** Prase *****************/
-	if (Settings.hasOwnProperty('Home')) {
-		if (typeof Settings.Home.Top === "string") Settings.Home.Top = Settings.Home.Top.split(",") // BoxJs字符串转数组
-		if (typeof Settings.Home.Top_more === "string") Settings.Home.Top_more = Settings.Home.Top_more.split(",") // BoxJs字符串转数组
-		if (typeof Settings.Home.Tab === "string") Settings.Home.Tab = Settings.Home.Tab.split(",") // BoxJs字符串转数组
-		if (typeof Settings.Bottom === "string") Settings.Bottom = Settings.Bottom.split(",") // BoxJs字符串转数组
-	}else if (Settings.hasOwnProperty('Option')) {
-		if (typeof Settings.Option.CreatorCenter === "string") Settings.Option.CreatorCenter = Settings.Option.CreatorCenter.split(",") // BoxJs字符串转数组
-		if (typeof Settings.Option.Recommend === "string") Settings.Option.Recommend = Settings.Option.Recommend.split(",") // BoxJs字符串转数组
-		if (typeof Settings.Option.More === "string") Settings.Option.More = Settings.Option.More.split(",") // BoxJs字符串转数
-	}
+	const { Settings, Caches, Configs } = getENV(name, platform, database);
+	traverseObject(Settings, (key, value) => {
+		if (typeof value === 'string') return value.split(',');
+	});
 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
-	return { Settings, Caches, Configs }
-};
+	return { Settings, Caches, Configs };
+}
+
+function traverseObject(object, callback) {
+	for (const key in object) {
+		const value = object[key];
+		object[key] = (typeof value === 'object' && value !== null)
+			? traverseObject(value, callback)
+			: callback(key, value);
+	}
+	return object;
+}
 
 /***************** Env *****************/
 // prettier-ignore
