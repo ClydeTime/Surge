@@ -195,15 +195,7 @@ function setENV(name, platform, database) {
 	return { Settings, Caches, Configs };
 }
 
-function traverseObject(object, callback) {
-	for (const key in object) {
-		const value = object[key];
-		object[key] = (typeof value === 'object' && value !== null)
-			? traverseObject(value, callback)
-			: callback(key, value);
-	}
-	return object;
-}
+function traverseObject(o,c){for(var t in o){var n=o[t];o[t]="object"==typeof n&&null!==n?traverseObject(n,c):c(t,n)}return o}
 
 /***************** Env *****************/
 // prettier-ignore
