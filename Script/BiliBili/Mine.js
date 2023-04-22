@@ -210,7 +210,7 @@ for (const [key, value] of Object.entries($response.headers)) {
 // 	$.log(`🎉 ${$.name}, Set Environment Variables`, `Settings: ${typeof Settings}`, `Settings内容: ${JSON.stringify(Settings)}`, "");
 // 	return { Settings, Caches, Configs }
 // };
-function setEnv(name, platform, database) {
+function setENV(name, platform, database) {
 	$.log(`⚠ ${$.name}, Set Environment Variables`, "");
 	/***************** Prase *****************/
 	const { Settings, Caches, Configs } = getENV(name, platform, database);
