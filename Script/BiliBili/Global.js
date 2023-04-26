@@ -36,6 +36,7 @@ const DataBase = {
 		case "true":
 		default:
 			let url = URL.parse($request?.url);
+			$.log(`🚧 ${$.name}`, `$response.body: ${JSON.stringify($response.body)}`, "");
 			const HOST = url?.host, PATH = url?.path, PATHs = PATH.split("/");
 			// 解析格式
 			const FORMAT = ($response?.headers?.["Content-Type"] ?? $response?.headers?.["content-type"])?.split(";")?.[0];
