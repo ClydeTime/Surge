@@ -36,6 +36,47 @@ const URL = new URLs();
 					break;
 				case "app.bilibili.com":
 				case "app.biliapi.net":
+					switch (PATH) {
+						case "x/v2/splash/show": // 开屏页
+						case "x/v2/splash/list": // 开屏页
+							if (body.data.show) {
+								delete body.data.show;
+								$.log(`🎉 ${$.name}`, "开屏页广告去除", "");
+							}
+							break;
+						case "x/v2/feed/index": // 推荐页
+							if (body.data.items?.length) {
+								body.data.items = body.data.items.filter(i => {
+									const {card_type: cardType, card_goto: cardGoto} = i;
+									if (cardType && cardGoto) {
+										if (cardType === 'banner_v8' && cardGoto === 'banner') {
+											if (i.banner_item) {
+												for (const v of i.banner_item) {
+													if (v.type) {
+														if (v.type === 'ad') {
+															$.log(`🎉 ${$.name}`, "banner广告去除", "");
+															return false;
+														}
+													}
+												}
+											}
+										} else if (cardType === 'cm_v2' && ['ad_web_s', 'ad_av', 'ad_web_gif', 'ad_player', 'ad_inline_3d', 'ad_inline_eggs'].includes(cardGoto)) {
+										// ad_player大视频广告 ad_web_gif大gif广告 ad_web_s普通小广告 ad_av创作推广广告 ad_inline_3d  上方大的视频3d广告 ad_inline_eggs 上方大的视频广告
+											$.log(`🎉 ${$.name}`, `${cardGoto}广告去除)`, "");
+											return false;
+										} else if (cardType === 'small_cover_v10' && cardGoto === 'game') {
+											$.log(`🎉 ${$.name}`, "游戏广告去除", "");
+											return false;
+										} else if (cardType === 'cm_double_v9' && cardGoto === 'ad_inline_av') {
+											$.log(`🎉 ${$.name}`, "创作推广-大视频广告", "");
+											return false;
+										}
+									}
+									return true;
+								});
+							}
+							break;
+					};
 					break;
 				case "api.bilibili.com":
 				case "api.biliapi.net":
@@ -135,12 +176,12 @@ const URL = new URLs();
 											/******************  initialization finish  ******************/
 											let data = DynAllReply.fromBinary(body);
 											if (data.topicList) {
-                        data.topicList = null;
-                        $.log(`🎉 ${$.name}`, "推荐话题去除", "");
+												data.topicList = null;
+												$.log(`🎉 ${$.name}`, "推荐话题去除", "");
 											}
 											if (data.upList) {
-                        data.upList = null;
-                        $.log(`🎉 ${$.name}`, "最常访问去除", "");
+												data.upList = null;
+												$.log(`🎉 ${$.name}`, "最常访问去除", "");
 											}
 											if (data.dynamicList?.list?.length) {
 												data.dynamicList.list = data.dynamicList.list.filter(
@@ -151,7 +192,7 @@ const URL = new URLs();
 														return false;
 													}
 												);
-                        $.log(`🎉 ${$.name}`, "动态列表广告去除", "");
+												$.log(`🎉 ${$.name}`, "动态列表广告去除", "");
 											}
 											body = PlayViewReply.toBinary(data);
 											break;
@@ -168,22 +209,22 @@ const URL = new URLs();
 											/******************  initialization finish  ******************/
 											let data = ViewReply.fromBinary(body);
 											if (data.cms?.length) {
-                         data.cms = [];
-                         $.log(`🎉 ${$.name}`, "up主推荐广去除", "");
+												data.cms = [];
+												$.log(`🎉 ${$.name}`, "up主推荐广去除", "");
 											}
 											if (data.relates?.length) {
-                        data.relates = data.relates.filter((item) => {
+												data.relates = data.relates.filter((item) => {
 													if (item.goto === "cm") {
 														return false;
 													}
 													return true;
 												});
-                        $.log(`🎉 ${$.name}`, "相关推荐广告去除", "");
+												$.log(`🎉 ${$.name}`, "相关推荐广告去除", "");
 											}
 											const adsControlValue = data.cmConfig?.adsControl?.value;
 											if (adsControlValue) {
 												data.cmConfig = null;
-                        $.log(`🎉 ${$.name}`, "up主推荐广告弹幕去除", "");
+												$.log(`🎉 ${$.name}`, "up主推荐广告弹幕去除", "");
 											}
 											for (const i in data.tIcon) {
 												if (data.tIcon[i] === null) {
@@ -194,8 +235,8 @@ const URL = new URLs();
 											}
 											body = ViewReply.toBinary(data);
 											break;
-                  }
-                  break;
+									}
+									break;
 								case "bilibili.pgc.gateway.player.v2.PlayURL": // 番剧
 									/******************  initialization start  *******************/
 									/******************  initialization finish  *******************/
