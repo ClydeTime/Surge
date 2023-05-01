@@ -146,9 +146,9 @@ async function signBiliBili() {
   if (config.cookie && (await me())) {
     var flag = true;
 
-    let exec_times = $.getdata(name + "_exec"); //实际执行次数
-    let real_times = 0;                         //需要执行总数
-    if (exec_times == "" || typeof exec_times == 'undefined') {
+    let exec_times = Number($.getdata(name + "_exec")); //用户设置投币次数
+    let real_times;                                     //实际需要投币总数
+    if (exec_times === 0) {
       real_times = 5;
       exec_times = 5 - (config.coins.num / 10);
     } else {
@@ -204,15 +204,8 @@ async function signBiliBili() {
       if ($.time('dd') == 1 || $.time('dd') == 15) {
         if (config.user.vipType == 2) {
           await vipPrivilege(1);
-          let charge_mid = $.getdata(name + "_charge_mid");
-          if (charge_mid == "" || typeof charge_mid == 'undefined') {
-            charge_mid = config.user.mid;
-          }
-          
-          let bp_num = $.getdata(name + "_bp_num");
-          if (bp_num == "" || typeof bp_num == 'undefined') {
-            bp_num = 5;
-          }
+          let charge_mid = $.getdata(name + "_charge_mid") || config.user.mid;
+          let bp_num = $.getdata(name + "_bp_num") || 5;
           await Charge(charge_mid, bp_num);//充电
           await vipPrivilege(2);
           await vipPrivilege(3);
@@ -776,7 +769,8 @@ async function Charge(mid, bp_num){
         return true;
       } else {
         console.log("- 充电失败");
-        console.log("- 失败原因 " + body.message);             
+        console.log(JSON.stringify(body));
+        console.log("- 失败原因 " + body.message);
         return false;
       }
     }, (reason) =>  {
