@@ -28,17 +28,17 @@ QX, Surge, Loon说明：
 脚本将在每天上午8点30执行, 您可以修改执行时间, 但是注意不要在凌晨执行, 否则部分任务可能无法完成(非脚本问题, 可能与B站服务器有关)
 2.投币设置
 定时任务脚本投币规则为: 随机获取关注列表Up主视频, 默认5视频5硬币, 不点赞.
-用户如需要不投币的版本, 请使用boxjs订阅「https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/boxjs.json」
+用户如需要不投币的版本, 请使用boxjs订阅「https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/boxjs/boxjs.json」
 将投币次数置为0, 并保存即可.
 /***********************
 Surge 脚本配置:
 ************************
 
 [Script]
-B站每日等级任务 = type=cron,cronexp=30 8 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Task/BiliBili.js,wake-system=1,timeout=15,script-update-interval=0
+B站每日等级任务 = type=cron,cronexp=30 8 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/BiliBili.js,wake-system=1,timeout=15,script-update-interval=0
 
 # BiliBili获取Cookie 「请在模块中添加,成功获取Cookie后模块应去除勾选」
-https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Task/GetCookie.sgmodule
+https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/GetCookie.sgmodule
 
 ************************
 QuantumultX 远程脚本配置:
