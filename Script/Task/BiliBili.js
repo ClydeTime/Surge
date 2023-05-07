@@ -1,7 +1,7 @@
 /*
 哔哩哔哩签到脚本
 
-更新时间: 2023-05-06
+更新时间: 2023-05-07
 脚本兼容: QuantumultX, Surge, Loon
 脚本作者: MartinsKing
 软件功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到/年度大会员每月B币券+等任务
@@ -88,19 +88,24 @@ const cookie2object = (cookie) => {
 
 const $ = new Env("bilibili")
 const startTime = format()
-const config = {
+let config = {
 	cookie: {},
-	cards: [],
-	headers: {},
-	cookieStr: ""
+	cookieStr: "",
+	key: "",
+	user: {},
+	watch: {},
+	share: {},
+	coins: {},
+	score: {}
 }
+let cards = []
+let real_times //实际需要投币次数
 
 !(async () => {
 	if (typeof $request != "undefined") {
 		$.log("- 正在获取cookie, 请稍后")
 		getCookie()
 	} else {
-		$.log("- 任务正在进行，请耐心等待")
 		await signBiliBili()
 	}
 })()
@@ -109,24 +114,21 @@ const config = {
 
 function getCookie() {
 	if ('object' == typeof $request) {
+		let Cookie
 		if (typeof $request.headers.cookie != 'undefined') {
-			config.headers.Cookie = $request.headers.cookie
+			Cookie = $request.headers.cookie
 		} else if (typeof $request.headers.Cookie != 'undefined') {
-			config.headers.Cookie = $request.headers.Cookie
+			Cookie = $request.headers.Cookie
 		}
-		config.cookie = cookie2object(config.headers.Cookie)
+		config.cookie = cookie2object(Cookie)
 		if (config.cookie.DedeUserID) {
 			$.log("- cookie获取成功")
-			$.setdata("", $.name + "_watch")
-			$.setdata("", $.name + "_share")
-			$.setdata("", $.name + "_coins")
-			$.setdata("", $.name + "_score")
 			let url = $request.url
-			let key = url.match(/.*access_key=(.*?)&build/)?.[1]
-			$.setdata(key, $.name + "_key")
-			$.setdata($.toStr(config.headers), $.name + "_headers")
+			config.key = url.match(/.*access_key=(.*?)&build/)?.[1]
+			config.cookieStr = `DedeUserID=${config.cookie.DedeUserID}; DedeUserID__ckMd5=${config.cookie.DedeUserID__ckMd5}; SESSDATA=${config.cookie.SESSDATA}; bili_jct=${config.cookie.bili_jct}; sid=${config.cookie.sid}`
+			$.setdata($.toStr(config), $.name + "_daily_bonus")
 			? $.msg($.name, "cookie catch success", "🎉获得 cookie 成功")
-			: $.msg($.name, "cookie catch failed", "💩获得 cookie 失败")
+			: $.msg($.name, "cookie catch failed", "🤒获得 cookie 失败")
 		} else {
 			$.log("- 尚未登录, 请登录后再重新获取cookie")
 		}   
@@ -134,56 +136,42 @@ function getCookie() {
 }
 
 async function signBiliBili() {
-	config.headers = $.getjson($.name + "_headers", {})
-	config.user = $.getjson($.name + "_user", {})
-	config.watch = $.getjson($.name + "_watch", {})
-	config.share = $.getjson($.name + "_share", {})
-	config.coins = $.getjson($.name + "_coins", {})
-	config.score = $.getjson($.name + "_score", {})
-	config.key = $.getdata($.name + "_key")
-	config.cookie = cookie2object(config.headers.Cookie)
-	config.cookieStr = `DedeUserID=${config.cookie.DedeUserID}; DedeUserID__ckMd5=${config.cookie.DedeUserID__ckMd5}; SESSDATA=${config.cookie.SESSDATA}; bili_jct=${config.cookie.bili_jct}; sid=${config.cookie.sid}`
+	config = $.getjson($.name + "_daily_bonus", {})
 	if (config.cookie && await me()) {
-		await queryStatus()
 		var flag = true
-		let exec_times = Number($.getdata($.name + "_exec"))	//用户设置投币次数
-		let real_times																				//实际需要投币总数
-		if (exec_times === 0) {
-			real_times = 5
-			exec_times = 5 - (config.coins.num / 10)
+		let exec_times = $.getdata($.name + "_exec")	//用户设置投币次数
+		if (!Boolean(exec_times)) {
+			exec_times = 5
+			real_times = 5 - (config.coins.num / 10)
 		} else {
-			real_times = exec_times
-			exec_times = exec_times - (config.coins.num / 10)
+			exec_times = Number(exec_times)
+			real_times = Math.max(0, exec_times - (config.coins.num / 10))
 		}
+		await queryStatus()
 		if (config.user.num < 1 || config.watch.num < 1 || config.share.num < 1 || (config.coins.num < real_times * 10 && config.user.money > 5)) flag = false
 		if (!flag){
 			await dynamic()
-			if (config.cards.length) {
-				item = config.cards[Math.floor(Math.random() * config.cards.length)]
+			if (cards.length) {
+				item = cards[Math.floor(Math.random() * cards.length)]
 				card = $.toObj(item.card)
-				short_link = encodeURIComponent(card.short_link_v2.replace(/\\\//g, '/'))
+				short_link = encodeURIComponent(card?.short_link_v2.replace(/\\\//g, '/'))
 				await watch(item.desc.rid, item.desc.bvid, card.cid)
 				await share(item.desc.rid, card.cid, short_link)
 			} else {
 				$.log("- 获取视频失败，请重试或寻求帮助")
 			}
-			
-			if (config.user.money < 5) {
-				$.log("3️⃣ 投币任务")
-				$.log("- 硬币不足, 投币失败")
+
+			$.log("3️⃣ 投币任务")
+			if (real_times === 0){
+				$.log(`- 今日已完成 ${config.coins.time}`)
 			} else {
-				$.log("3️⃣ 投币任务")
-				if (exec_times === 0){
-					$.log(`- 今日已完成 ${config.coins.time}`)
-				} else{
-					//$.log(`- 需要投币次数 ${exec_times}`)
-					for (var i = 0; i < exec_times; i ++) {
-						if (config.user.money < 5) {
-							$.log("- 硬币不足, 投币失败")
-							break
-						} else {
-							await coin()
-						}
+				//$.log(`- 需要投币次数 ${real_times}`)
+				for (var i = 0; i < real_times; i ++) {
+					if (config.user.money < 5) {
+						$.log("- 硬币不足, 投币失败")
+						break
+					} else {
+						await coin()
 					}
 				}
 			}
@@ -230,11 +218,10 @@ async function signBiliBili() {
 		let title = `${$.name} 登录${config.user.num}/观看${config.watch.num}/分享${config.share.num}/投币${config.coins.num / 10}${flag ? "已完成" : "未完成"}`
 		$.log(`#### ${title}`)
 
-		let u = `登录时间: ${config.user.time}`
-		let w = `观看时间: ${config.watch.time}`
-		let s = `分享时间: ${config.share.time}`
-		let z = `投币时间: ${config.coins.time}`
-
+		let u = `登录时间: ${config.user.time || "暂无"}`
+		let w = `观看时间: ${config.watch.time || "暂无"}`
+		let s = `分享时间: ${config.share.time || "暂无"}`
+		let z = `投币时间: ${config.coins.time || "暂无"}`
 		$.log(`- ${u}`)
 		$.log(`- ${w}`)
 		$.log(`- ${s}`)
@@ -255,7 +242,7 @@ async function signBiliBili() {
 			$.msg(notice.title, "✅任务完成", notice.content)
 		}
 	} else {
-		$.msg(`${$.name} 任务失败`,`📅 ${startTime}`, "💩请更新cookie")
+		$.msg(`${$.name} 任务失败`,`📅 ${startTime}`, "🤒请更新cookie")
 	}
 }
 
@@ -280,11 +267,9 @@ function queryStatus() {
 							if (!config['user'].hasOwnProperty("time")) {
 								config.user.time = startTime
 							}
-							$.setdata($.toStr(config.user), $.name + "_user")
 						} else {
-							$.log("- 今日尚未登录")
+							$.log("! 今日尚未登录")
 							config.user.num = 0
-							$.setdata($.toStr(config.user), $.name + "_user")
 						}
 						if (body.data.watch){
 							$.log("- 今日已观看")
@@ -292,11 +277,9 @@ function queryStatus() {
 							if (!config['watch'].hasOwnProperty("time")) {
 								config.watch.time = startTime
 							}
-							$.setdata($.toStr(config.watch), $.name + "_watch")
 						} else {
-							$.log("- 今日尚未观看")
+							$.log("! 今日尚未观看")
 							config.watch.num = 0
-							$.setdata($.toStr(config.watch), $.name + "_watch")
 						}
 						if (body.data.share){
 							$.log("- 今日已分享")
@@ -304,11 +287,9 @@ function queryStatus() {
 							if (!config['share'].hasOwnProperty("time")) {
 								config.share.time = startTime
 							}
-							$.setdata($.toStr(config.share), $.name + "_share")
 						} else {
-							$.log("- 今日尚未分享")
+							$.log("! 今日尚未分享")
 							config.share.num = 0
-							$.setdata($.toStr(config.share), $.name + "_share")
 						}
 						if (body.data.coins === 50){
 							$.log("- 今日已投币")
@@ -320,12 +301,17 @@ function queryStatus() {
 									config.coins.time = startTime
 								}
 							}
-							$.setdata($.toStr(config.coins), $.name + "_coins")
-						} else {
-							$.log("- 今日尚未投币(或不足五次投币)")
+						} else if ((body.data.coins / 10) >= real_times) {
+							$.log("- 今天投币已达到用户预设量")
 							config.coins.num = body.data.coins
-							$.setdata($.toStr(config.coins), $.name + "_coins")
+						} else if (config.user.money < 5) {
+							$.log("! 硬币数不足")
+							config.coins.num = body.data.coins
+						} else {
+							$.log("! 今日投币未完成")
+							config.coins.num = body.data.coins
 						}
+						$.setdata($.toStr(config), $.name + "_daily_bonus")
 					} else {
 						$.log("- 查询失败")
 						$.log("- 失败原因 " + body?.message)
@@ -343,7 +329,7 @@ function queryStatus() {
 async function watch(aid, bvid, cid) {
 	$.log("1️⃣ 观看(登录)任务")
 	if (check("watch")) {
-		$.log(`- 正在观看(登录)(${bvid}) ${config.watch?.time || ""}`)
+		$.log(`- 正在观看(登录)(${bvid})`)
 		const body = {
 			aid: aid,
 			cid: cid,
@@ -353,7 +339,7 @@ async function watch(aid, bvid, cid) {
 			played_time : 1,
 			real_played_time: 1,
 			realtime: 1,
-			start_ts: Date.parse(new Date()) / 1000,
+			start_ts: parseInt($.startTime / 1000),
 			type: 3,
 			dt: 2,
 			play_type: 0,
@@ -376,7 +362,7 @@ async function watch(aid, bvid, cid) {
 			if (body?.code === 0) {
 				$.log(`- 累计观看(登录)次数 ${(config.watch.num || 0) + 1}`)
 				config.watch.num = (config.watch.num || 0) + 1
-				$.setdata($.toStr(config.watch), $.name + "_watch")
+				$.setdata($.toStr(config), $.name + "_daily_bonus")
 			} else {
 				$.log("- 观看失败, 失败原因: " + body?.message)
 			}
@@ -426,7 +412,7 @@ async function share(aid, cid, short_link) {
 			if (body?.code === 0) {
 				config.share.num = (config.share.num || 0) + 1
 				$.log("- 分享成功")
-				$.setdata($.toStr(config.share), $.name + "_share")
+				$.setdata($.toStr(config), $.name + "_daily_bonus")
 			} else {
 				$.log("- 分享失败, 失败原因: " + body?.message)
 			}
@@ -471,11 +457,11 @@ async function coin() {
 							$.log("- 投币成功")
 							config.user.money -= 1
 							config.coins.num += 10
-							$.setdata($.toStr(config.coins), $.name + "_coins")
+							$.setdata($.toStr(config), $.name + "_daily_bonus")
 						} else {
 							$.log("- 投币失败, 失败原因 " + body.message)
 							config.coins.failures = (config.coins.failures == 0 || typeof config.coins.failures == 'undefined' ? 1 : config.coins.failures + 1)
-							$.setdata($.toStr(config.coins), $.name + "_coins")
+							$.setdata($.toStr(config), $.name + "_daily_bonus")
 							if (config.coins.failures < 11) {
 								$.log("- 正在重试...重试次数 " + (config.coins.failures - 1) + "(超过十次不再重试)")
 								await coin()
@@ -673,7 +659,7 @@ async function vipScoreSign() {
 						$.log("- 签到成功")
 						config.score.time = startTime
 						config.score.num = 1
-						$.setdata($.toStr(config.score), $.name + "_score")
+						$.setdata($.toStr(config), $.name + "_daily_bonus")
 					} else {
 						$.log("- 签到失败")
 						$.log("- 失败原因 " + body?.message)
@@ -966,26 +952,17 @@ function me() {
 			const body = $.toObj(response.body)
 			if (body?.code) {
 				$.log("- ❌❌获得用户信息失败(请更新cookie)")
-				$.setdata(null, $.name + "_user")
+				$.setdata(null, $.name + "_daily_bonus")
 				return false
 			} else {
-				$.log("- 🎉🎉cookie有效即将开始任务🎉🎉")
-				if (check("user") || config.user.mid != body?.data?.mid) {
+				$.log("- 🎉cookie有效任务即将开始🎉")
+				if (check("user")) {
 					config.user = body?.data
-					config.user.time = startTime
-					config.watch.time = startTime
-					config.share.time = startTime
-					config.coins.time = startTime
-					config.score.num = 0
-					$.setdata($.toStr(config.watch), $.name + "_watch")
-					$.setdata($.toStr(config.share), $.name + "_share")
-					$.setdata($.toStr(config.coins), $.name + "_coins")
-					$.setdata($.toStr(config.score), $.name + "_score")
 					config.user.num = 1
 				} else {
 					config.user.num = (config.user.num || 0) + 1
 				}
-				$.setdata($.toStr(config.user), $.name + "_user")
+				$.setdata($.toStr(config), $.name + "_daily_bonus")
 
 				config.user.mext_exp = config.user.level_info.next_exp - config.user.level_info.current_exp
 				config.user.next_day = Math.ceil(config.user.mext_exp / 15)
@@ -1013,7 +990,7 @@ function me() {
 				$.log(`- 剩余硬币最多可投: ${Math.floor((config.user.money)/5)}天`)
 				$.log(
 					"- 距离满级最快还需: " +
-						Math.ceil(config.user.v6_exp / 65) +
+					Math.max(0, Math.ceil(config.user.v6_exp / 65)) +
 						"天(日常 + 投币*5)"
 				)
 				return true
@@ -1043,7 +1020,9 @@ function dynamic() {
 				try {
 					const body = $.toObj(data)
 					if (body?.data?.cards) {
-						config.cards = body.data.cards
+						cards = body.data.cards
+						const { user, watch, share } = config
+						user.time = watch.time = share.time = startTime
 						$.log("- 获取视频动态成功")
 					} else {
 						$.log("- 获取视频动态失败")
