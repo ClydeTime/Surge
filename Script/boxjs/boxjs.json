@@ -112,7 +112,6 @@
             "id": "BiliBili.Modified.Skin",
             "name": "📺 BiliBili: ⚙ Modified ",
             "author": "@BiliUniverse",
-            "repo": "https://github.com/BiliUniverse/Enhanced/tree/beta",
             "icons": [
                 "https://github.com/BiliUniverse/Enhanced/raw/main/database/icon_circled_108x.png",
                 "https://github.com/BiliUniverse/Enhanced/raw/main/database/icon_circled_108x.png"
@@ -123,7 +122,6 @@
             ],
             "keys": [
                 "@BiliBili.Modified.Settings.Skin",
-                "@BiliBili.Modified.Caches"
             ],
             "settings": [
                 {
@@ -132,7 +130,7 @@
                     "val": true,
                     "type": "boolean",
                     "desc": "是否启用此APP修改"
-                }
+                },
                 {
                     "id": "@BiliBili.Modified.Settings.Skin",
                     "name": "皮肤",
