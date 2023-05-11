@@ -138,17 +138,18 @@ function getCookie() {
 async function signBiliBili() {
 	config = $.getjson($.name + "_daily_bonus", {})
 	if (config.cookie && await me()) {
+		await queryStatus()
 		var flag = true
 		let exec_times = $.getdata($.name + "_exec")	//用户设置投币次数
 		if (!Boolean(exec_times)) {
 			exec_times = 5
-			real_times = 5 - (config.coins.num / 10)
+			real_times = 5 - (Number(config.coins.num) / 10)
 		} else {
 			exec_times = Number(exec_times)
-			real_times = Math.max(0, exec_times - (config.coins.num / 10))
+			real_times = Math.max(0, exec_times - (Number(config.coins.num) / 10))
 		}
-		await queryStatus()
-		if (config.user.num < 1 || config.watch.num < 1 || config.share.num < 1 || (config.coins.num < real_times * 10 && config.user.money > 5)) flag = false
+		
+		if (config.user.num < 1 || config.watch.num < 1 || config.share.num < 1 || (config.coins.num < exec_times * 10 && config.user.money > 5)) flag = false
 		if (!flag){
 			await dynamic()
 			if (cards.length) {
@@ -167,8 +168,8 @@ async function signBiliBili() {
 			} else {
 				//$.log(`- 需要投币次数 ${real_times}`)
 				for (var i = 0; i < real_times; i ++) {
-					if (config.user.money < 5) {
-						$.log("- 硬币不足, 投币失败")
+					if (config.user.money <= 5) {
+						$.log("- 硬币不足,投币失败")
 						break
 					} else {
 						await coin()
@@ -212,7 +213,7 @@ async function signBiliBili() {
 			config.user.num < 1 ||
 			config.watch.num < 1 ||
 			config.share.num < 1 ||
-			(config.coins.num < real_times * 10 && config.user.money > 5)	//硬币不足也算完成任务
+			(config.coins.num < exec_times * 10 && config.user.money > 5)	//硬币不足也算完成任务
 				? false
 				: true
 		let title = `${$.name} 登录${config.user.num}/观看${config.watch.num}/分享${config.share.num}/投币${config.coins.num / 10}${flag ? "已完成" : "未完成"}`
@@ -459,7 +460,7 @@ async function coin() {
 							config.coins.num += 10
 							$.setdata($.toStr(config), $.name + "_daily_bonus")
 						} else {
-							$.log("- 投币失败, 失败原因 " + body.message)
+							$.log("- 投币失败,失败原因 " + body.message)
 							config.coins.failures = (config.coins.failures == 0 || typeof config.coins.failures == 'undefined' ? 1 : config.coins.failures + 1)
 							$.setdata($.toStr(config), $.name + "_daily_bonus")
 							if (config.coins.failures < 11) {
