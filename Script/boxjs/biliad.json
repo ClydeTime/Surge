@@ -49,28 +49,28 @@
 								},
 								{
 										"id": "@BiliBili.ADBlock.Settings.Detail.story",
-										"name": "推荐页story开关",
+										"name": "首页短视频流广告开关",
 										"val": true,
 										"type": "boolean",
 										"desc": "是否启用关闭广告"
 								},
 								{
 										"id": "@BiliBili.ADBlock.Settings.Detail.cinema",
-										"name": "观影页开关",
+										"name": "番剧电影广告开关",
 										"val": true,
 										"type": "boolean",
 										"desc": "是否启用关闭广告"
 								},
 								{
 										"id": "@BiliBili.ADBlock.Settings.Detail.view",
-										"name": "up主视频开关",
+										"name": "用户投稿视频广告开关",
 										"val": true,
 										"type": "boolean",
 										"desc": "是否启用关闭广告"
 								},
 								{
 										"id": "@BiliBili.ADBlock.Settings.Detail.xlive",
-										"name": "直播页开关",
+										"name": "直播页广告开关",
 										"val": true,
 										"type": "boolean",
 										"desc": "是否启用关闭广告"
