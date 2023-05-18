@@ -48,6 +48,13 @@
 										"desc": "是否启用关闭广告"
 								},
 								{
+										"id": "@BiliBili.ADBlock.Settings.Detail.activity",
+										"name": "推荐页活动大图",
+										"val": false,
+										"type": "boolean",
+										"desc": "是否启用关闭广告"
+								},
+								{
 										"id": "@BiliBili.ADBlock.Settings.Detail.story",
 										"name": "首页短视频流广告开关",
 										"val": true,
