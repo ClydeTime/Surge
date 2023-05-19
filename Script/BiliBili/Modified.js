@@ -2,7 +2,7 @@
 WEBSITE: https://biliuniverse.io
 README: https://github.com/BiliUniverse
 */
-const $ = new Env("📺 BiliBili: 🛡️ Modified v0.0.1(1) response");
+const $ = new Env("📺 BiliBili: 👘 Modified v0.0.1(1) response");
 const URL = new URLs();
 const DataBase = {
 	"Modified":{
