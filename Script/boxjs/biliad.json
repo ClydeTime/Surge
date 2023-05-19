@@ -83,6 +83,13 @@
 										"desc": "是否启用关闭广告"
 								},
 								{
+										"id": "@BiliBili.ADBlock.Settings.Detail.Hot_search",
+										"name": "搜索页热搜开关",
+										"val": true,
+										"type": "boolean",
+										"desc": "是否启用关闭广告"
+								},
+								{
 										"id": "@BiliBili.ADBlock.Settings.Detail.Hot_topics",
 										"name": "动态页热门话题开关",
 										"val": true,
