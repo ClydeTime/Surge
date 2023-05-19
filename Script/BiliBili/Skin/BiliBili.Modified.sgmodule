@@ -1,9 +1,10 @@
-#!name=📺 BiliBili: ⚙ Modified
+#!name=📺 BiliBili: 👘 Modified
 #!desc=哔哩哔哩：切换皮肤
 #!author=MK
 
 [Script]
 BiliBili.Modified.x.resource.show.skin = type=http-response, pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\?.*, requires-body=1, script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/BiliBili/Modified.js, argument=
+BiliBili.Modified.x.v2.account.myinfo = type=http-response, pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo, requires-body=1, script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/BiliBili/Modified.js, argument=
 
 [MITM]
 hostname = %APPEND% app.bilibili.com
