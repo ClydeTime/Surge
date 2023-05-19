@@ -8,7 +8,7 @@
 		[
 				{
 						"id": "BiliBili.Modified.Skin",
-						"name": "📺 BiliBili: ⚙ Modified ",
+						"name": "📺 BiliBili: 👘 Modified ",
 						"author": "@BiliUniverse",
 						"icons":
 						[
@@ -39,9 +39,9 @@
 										"name": "皮肤",
 										"val":
 										[
-												"34813"
+												"1682863365001"
 										],
-										"type": "checkboxes",
+										"type": "radio",
 										"items":
 										[
 												{
@@ -163,9 +163,9 @@
 										"name": "加载动画",
 										"val":
 										[
-												"2531"
+												"32263"
 										],
-										"type": "checkboxes",
+										"type": "radio",
 										"items":
 										[
 												{
