@@ -78,8 +78,21 @@ const DataBase = {
 									break;
 								case "x/v2/feed/index/story": // 推荐story页
 									break;
+								case "x/v2/search/square": // 搜索页
+									break;
+								case "x/v2/account/myinfo": // 搜索页
+									 // 会员清晰度
+									if (data.vip.status !== 1) {
+										data.vip.type = 2;
+										data.vip.status = 1;
+										data.vip.vip_pay_type = 1;
+										data.vip.due_date = 2208960000; // Unix 时间戳 2040-01-01 00:00:00
+										data.vip.role = 3;
+										$.log(`🎉 ${$.name}`, "解锁会员清晰度");
+									}
+									body.data = data;
+									break;
 								case "x/resource/show/skin": // 皮肤页
-									;
 									data.user_equip = Configs.Skin.user_equip.find(e => {
 										if (Settings.Skin.user_equip.includes(e.id.toString())) {
 											$.log("切换皮肤为: "+ e.name);
