@@ -40,7 +40,7 @@
 										[
 												"1682863365001"
 										],
-										"type": "radio",
+										"type": "radios",
 										"options":
 										[
 												{
@@ -64,7 +64,7 @@
 										[
 												"32263"
 										],
-										"type": "radio",
+										"type": "radios",
 										"options":
 										[
 												{
