@@ -1,7 +1,7 @@
 /*
 哔哩哔哩签到脚本
 
-更新时间: 2023-05-07
+更新时间: 2023-05-20
 脚本兼容: QuantumultX, Surge, Loon
 脚本作者: MartinsKing
 软件功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到/年度大会员每月B币券+等任务
@@ -191,9 +191,10 @@ async function signBiliBili() {
 			await vipScoreDress()
 			await vipWatchAccept()
 			//B币券每月尝试两次领取
-			if ($.time('dd') === 1 || $.time('dd') === 15) {
+			if ($.time('dd') === '1' || $.time('dd') === '15') {
 				if (config.user.vipType === 2) {
 					await vipPrivilege(1)
+					await $.wait(800); //延迟执行，防止领劵延迟
 					let charge_mid = $.getdata($.name + "_charge_mid") || config.user.mid
 					let bp_num = $.getdata($.name + "_bp_num") || 5
 					await Charge(charge_mid, bp_num)//充电
@@ -303,9 +304,10 @@ function queryStatus() {
 								}
 							}
 						} else if ((body.data.coins / 10) >= real_times) {
-							$.log("- 今天投币已达到用户预设量")
+							config.coins.time = startTime
+							$.log("- 今日投币已完成用户预期")
 							config.coins.num = body.data.coins
-						} else if (config.user.money < 5) {
+						} else if (config.user.money <= 5) {
 							$.log("! 硬币数不足")
 							config.coins.num = body.data.coins
 						} else {
@@ -987,7 +989,7 @@ function me() {
 					`- 距离下级还需: ${config.user.next_day}天(登录 观看 分享)`
 				)
 				$.log(
-					`- 距离满级还需: ${config.user.v6_day}天(登录 观看 分享)`
+					`- 距离满级还需: ${Math.max(0, config.user.v6_day)}天(登录 观看 分享)`
 				)
 				$.log(`- 剩余硬币最多可投: ${Math.floor((config.user.money)/5)}天`)
 				$.log(
