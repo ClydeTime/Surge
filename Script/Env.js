@@ -370,10 +370,15 @@ function Env(name, opts) {
      * @returns {String} 将 Object 对象 转换成 queryStr: key=val&name=senku
      */
     queryStr(options) {
-      let params = new URLSearchParams(options);
-      let queryString = params.toString();
-      return queryString
-    }
+			let params = [];
+			for (let key in options) {
+				if (options.hasOwnProperty(key)) {
+					params.push(`${key}=${encodeURIComponent(options[key])}`);
+				}
+			}
+			let queryString = params.join('&');
+			return queryString;
+		}
 
     /**
      *
@@ -381,15 +386,18 @@ function Env(name, opts) {
      * @returns {Object} 将 queryStr: key=val&name=senku 字符串 转换成 Object
      */
     queryObj(options) {
-      let params = new URLSearchParams(options);
-      let obj = {};
-
-      for (let pair of params.entries()) {
-        obj[pair[0]] = pair[1];
-      }
-
-      return obj
-    }
+			let obj = {};
+			let pairs = options.split('&');
+			for (let pair of pairs) {
+				let keyValue = pair.split('=');
+				let key = keyValue[0];
+				let value = decodeURIComponent(keyValue[1] || '');
+				if (key) {
+					obj[key] = value;
+				}
+			}
+			return obj;
+		}
 
     /**
      * 系统通知
