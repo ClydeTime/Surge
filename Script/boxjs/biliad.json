@@ -7,8 +7,8 @@
 		"apps":
 		[
 				{
-						"id": "BiliBili.ADBlock.Detail",
-						"name": "📺 BiliBili: 🛡️ ADBlock ",
+						"id": "BiliBili.Enhanced.Mine",
+						"name": "📺 BiliBili: ⚙ Enhanced (我的)",
 						"author": "@BiliUniverse",
 						"icons":
 						[
@@ -22,7 +22,7 @@
 						],
 						"keys":
 						[
-								"@BiliBili.ADBlock.Settings.Detail"
+							"@BiliBili.Enhanced.Settings.Mine"
 						],
 						"settings": [
 							{
