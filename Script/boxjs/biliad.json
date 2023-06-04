@@ -96,7 +96,7 @@
 										"label": "有奖活动"
 									}
 								],
-								"desc": ""
+								"desc": "与phone版本兼容"
 							},
 							{
 								"id": "@BiliBili.Enhanced.Settings.Mine.Recommend",
@@ -200,7 +200,7 @@
 										"label": "我的课程"
 									}
 								],
-								"desc": ""
+								"desc": "与phone版本兼容"
 							},
 							{
 								"id": "@BiliBili.Enhanced.Settings.Mine.More",
@@ -267,7 +267,8 @@
 										"key": "798",
 										"label": "设置"
 									}
-								]
+								],
+								"desc": "与phone版本兼容"
 							}
 						]
 				}
