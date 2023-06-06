@@ -1,6 +1,6 @@
 {
 		"id": "clydetime.app.sub",
-		"name": "B站广告控制",
+		"name": "B站我的页面",
 		"author": "@MartinsKing",
 		"icon": "https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Tips/IMG_4128.png",
 		"repo": "https://github.com/ClydeTime/Surge/tree/main/Script",
@@ -39,16 +39,16 @@
 								"type": "checkboxes",
 								"items": [
 									{
-										"key": "171",
-										"label": "创作首页"
+										"key": "171_786",
+										"label": "创作首页(iOS/ipadOS)"
 									},
 									{
-										"key": "172",
-										"label": "稿件管理"
+										"key": "172_787",
+										"label": "稿件管理(iOS/ipadOS)"
 									},
 									{
-										"key": "174",
-										"label": "有奖活动"
+										"key": "174_788",
+										"label": "有奖活动(iOS/ipadOS)"
 									},
 									{
 										"key": "533",
@@ -72,31 +72,19 @@
 									},
 									{
 										"key": "785",
-										"label": "投稿（pad）"
-									},
-									{
-										"key": "786",
-										"label": "创作首页（pad）"
-									},
-									{
-										"key": "787",
-										"label": "稿件管理（pad）"
-									},
-									{
-										"key": "788",
-										"label": "有奖活动（pad）"
+										"label": "投稿(ipadOS)"
 									}
 								],
-								"desc": "白色版本APP不存在此选项"
+								"desc": "白色版本APP不存在此选项(未单独注明选项皆为iOS版本)"
 							},
 							{
 								"id": "@BiliBili.Enhanced.Settings.Mine.Recommend",
 								"name": "推荐服务",
 								"val": [
-									"400,794",
+									"400_794",
 									"402",
 									"403",
-									"404,791",
+									"404_791",
 									"789",
 									"790",
 									"791",
@@ -106,8 +94,8 @@
 								"type": "checkboxes",
 								"items": [
 									{
-										"key": "400,794",
-										"label": "我的课程"
+										"key": "400_794",
+										"label": "我的课程(iOS/ipadOS)"
 									},
 									{
 										"key": "401",
@@ -122,12 +110,12 @@
 										"label": "游戏中心"
 									},
 									{
-										"key": "404,791",
-										"label": "我的钱包"
+										"key": "404_791",
+										"label": "我的钱包(iOS/ipadOS)"
 									},
 									{
-										"key": "406",
-										"label": "直播中心"
+										"key": "406_792",
+										"label": "直播中心(iOS/ipadOS)"
 									},
 									{
 										"key": "423",
@@ -155,26 +143,22 @@
 									},
 									{
 										"key": "789",
-										"label": "我的关注（pad）"
+										"label": "我的关注(ipadOS)"
 									},
 									{
 										"key": "790",
-										"label": "我的消息（pad）"
-									},
-									{
-										"key": "792",
-										"label": "直播中心（pad）"
+										"label": "我的消息(ipadOS)"
 									},
 									{
 										"key": "793",
-										"label": "大会员（pad）"
+										"label": "大会员(ipadOS)"
 									},
 									{
 										"key": "2542",
-										"label": "我的游戏（pad）"
+										"label": "我的游戏(ipadOS)"
 									}
 								],
-								"desc": "白色版本APP不存在此选项"
+								"desc": "白色版本APP不存在此选项(未单独注明选项皆为iOS版本)"
 							},
 							{
 								"id": "@BiliBili.Enhanced.Settings.Mine.More",
@@ -193,8 +177,8 @@
 										"label": "联系客服"
 									},
 									{
-										"key": "410",
-										"label": "设置"
+										"key": "410_798",
+										"label": "设置(iOS/ipadOS)"
 									},
 									{
 										"key": "741",
@@ -213,8 +197,8 @@
 										"label": "青少年模式（概念版）"
 									},
 									{
-										"key": "964",
-										"label": "青少年守护"
+										"key": "964_1070",
+										"label": "青少年守护(iOS/ipadOS)"
 									},
 									{
 										"key": "1028",
@@ -222,17 +206,10 @@
 									},
 									{
 										"key": "797",
-										"label": "我的客服（pad）"
-									},
-									{
-										"key": "1070",
-										"label": "青少年守护（pad）"
-									},
-									{
-										"key": "798",
-										"label": "设置（pad）"
+										"label": "我的客服(ipadOS)"
 									}
-								]
+								],
+								"desc": "未单独注明选项皆为iOS版本"
 							}
 						]
 				}
