@@ -72,19 +72,19 @@
 									},
 									{
 										"key": "785",
-										"label": "投稿(pad)"
+										"label": "投稿（pad）"
 									},
 									{
 										"key": "786",
-										"label": "创作首页(pad)"
+										"label": "创作首页（pad）"
 									},
 									{
 										"key": "787",
-										"label": "稿件管理(pad)"
+										"label": "稿件管理（pad）"
 									},
 									{
 										"key": "788",
-										"label": "有奖活动(pad)"
+										"label": "有奖活动（pad）"
 									}
 								],
 								"desc": "白色版本APP不存在此选项"
@@ -155,31 +155,31 @@
 									},
 									{
 										"key": "789",
-										"label": "我的关注(pad)"
+										"label": "我的关注（pad）"
 									},
 									{
 										"key": "790",
-										"label": "我的消息(pad)"
+										"label": "我的消息（pad）"
 									},
 									{
 										"key": "791",
-										"label": "我的钱包(pad)"
+										"label": "我的钱包（pad）"
 									},
 									{
 										"key": "792",
-										"label": "直播中心(pad)"
+										"label": "直播中心（pad）"
 									},
 									{
 										"key": "793",
-										"label": "大会员(pad)"
+										"label": "大会员（pad）"
 									},
 									{
 										"key": "2542",
-										"label": "我的游戏(pad)"
+										"label": "我的游戏（pad）"
 									},
 									{
 										"key": "794",
-										"label": "我的课程(pad)"
+										"label": "我的课程（pad）"
 									}
 								],
 								"desc": "白色版本APP不存在此选项"
@@ -230,15 +230,15 @@
 									},
 									{
 										"key": "797",
-										"label": "我的客服(pad)"
+										"label": "我的客服（pad）"
 									},
 									{
 										"key": "1070",
-										"label": "青少年守护(pad)"
+										"label": "青少年守护（pad）"
 									},
 									{
 										"key": "798",
-										"label": "设置(pad)"
+										"label": "设置（pad）"
 									}
 								]
 							}
