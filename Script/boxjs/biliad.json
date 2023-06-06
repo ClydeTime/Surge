@@ -34,7 +34,7 @@
 							},
 							{
 								"id": "@BiliBili.Enhanced.Settings.Mine.CreatorCenter",
-								"name": "创作中心(phone)",
+								"name": "创作中心",
 								"val": [],
 								"type": "checkboxes",
 								"items": [
@@ -69,43 +69,39 @@
 									{
 										"key": "710",
 										"label": "我的直播"
+									},
+									{
+										"key": "785",
+										"label": "投稿(pad)"
+									},
+									{
+										"key": "786",
+										"label": "创作首页(pad)"
+									},
+									{
+										"key": "787",
+										"label": "稿件管理(pad)"
+									},
+									{
+										"key": "788",
+										"label": "有奖活动(pad)"
 									}
 								],
 								"desc": "白色版本APP不存在此选项"
 							},
 							{
-								"id": "@BiliBili.Enhanced.Settings.Mine.CreatorCenter_Pad",
-								"name": "创作中心(pad)",
-								"val": [],
-								"type": "checkboxes",
-								"items": [
-									{
-										"key": "785",
-										"label": "投稿"
-									},
-									{
-										"key": "786",
-										"label": "创作首页"
-									},
-									{
-										"key": "787",
-										"label": "稿件管理"
-									},
-									{
-										"key": "788",
-										"label": "有奖活动"
-									}
-								],
-								"desc": "与phone版本兼容"
-							},
-							{
 								"id": "@BiliBili.Enhanced.Settings.Mine.Recommend",
-								"name": "推荐服务(phone)",
+								"name": "推荐服务",
 								"val": [
 									"400",
 									"402",
 									"403",
-									"404"
+									"404",
+									"789",
+									"790",
+									"791",
+									"2542",
+									"794"
 								],
 								"type": "checkboxes",
 								"items": [
@@ -156,59 +152,47 @@
 									{
 										"key": "990",
 										"label": "能量加油站"
+									},
+									{
+										"key": "789",
+										"label": "我的关注(pad)"
+									},
+									{
+										"key": "790",
+										"label": "我的消息(pad)"
+									},
+									{
+										"key": "791",
+										"label": "我的钱包(pad)"
+									},
+									{
+										"key": "792",
+										"label": "直播中心(pad)"
+									},
+									{
+										"key": "793",
+										"label": "大会员(pad)"
+									},
+									{
+										"key": "2542",
+										"label": "我的游戏(pad)"
+									},
+									{
+										"key": "794",
+										"label": "我的课程(pad)"
 									}
 								],
 								"desc": "白色版本APP不存在此选项"
 							},
 							{
-								"id": "@BiliBili.Enhanced.Settings.Mine.Recommend_Pad",
-								"name": "推荐服务(pad)",
-								"val": [
-									"789",
-									"790",
-									"791",
-									"794"
-								],
-								"type": "checkboxes",
-								"items": [
-									{
-										"key": "789",
-										"label": "我的关注"
-									},
-									{
-										"key": "790",
-										"label": "我的消息"
-									},
-									{
-										"key": "791",
-										"label": "我的钱包"
-									},
-									{
-										"key": "792",
-										"label": "直播中心"
-									},
-									{
-										"key": "793",
-										"label": "大会员"
-									},
-									{
-										"key": "2542",
-										"label": "我的游戏"
-									},
-									{
-										"key": "794",
-										"label": "我的课程"
-									}
-								],
-								"desc": "与phone版本兼容"
-							},
-							{
 								"id": "@BiliBili.Enhanced.Settings.Mine.More",
-								"name": "更多服务(phone)",
+								"name": "更多服务",
 								"val": [
 									"407",
 									"410",
-									"1028"
+									"1028",
+									"797",
+									"798"
 								],
 								"type": "checkboxes",
 								"items": [
@@ -243,32 +227,20 @@
 									{
 										"key": "1028",
 										"label": "我的NFT"
-									}
-								]
-							},
-							{
-								"id": "@BiliBili.Enhanced.Settings.Mine.More_Pad",
-								"name": "更多服务(pad)",
-								"val": [
-									"797",
-									"798"
-								],
-								"type": "checkboxes",
-								"items": [
+									},
 									{
 										"key": "797",
-										"label": "我的客服"
+										"label": "我的客服(pad)"
 									},
 									{
 										"key": "1070",
-										"label": "青少年守护"
+										"label": "青少年守护(pad)"
 									},
 									{
 										"key": "798",
-										"label": "设置"
+										"label": "设置(pad)"
 									}
-								],
-								"desc": "与phone版本兼容"
+								]
 							}
 						]
 				}
