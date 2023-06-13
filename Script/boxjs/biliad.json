@@ -1,14 +1,14 @@
 {
 		"id": "clydetime.app.sub",
-		"name": "B站我的页面",
+		"name": "B站广告控制",
 		"author": "@MartinsKing",
 		"icon": "https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Tips/IMG_4128.png",
 		"repo": "https://github.com/ClydeTime/Surge/tree/main/Script",
 		"apps":
 		[
 				{
-						"id": "BiliBili.Enhanced.Mine",
-						"name": "📺 BiliBili: ⚙ Enhanced (我的)",
+						"id": "BiliBili.ADBlock.Detail",
+						"name": "📺 BiliBili: 🛡️ ADBlock ",
 						"author": "@BiliUniverse",
 						"icons":
 						[
@@ -22,193 +22,126 @@
 						],
 						"keys":
 						[
-							"@BiliBili.Enhanced.Settings.Mine"
+								"@BiliBili.ADBlock.Settings.Detail"
 						],
-						"settings": [
+						"settings":[
 							{
-								"id": "@BiliBili.Enhanced.Settings.Switch",
+								"id": "@BiliBili.ADBlock.Settings.Switch",
 								"name": "总功能开关",
 								"val": true,
 								"type": "boolean",
 								"desc": "是否启用此APP修改"
 							},
 							{
-								"id": "@BiliBili.Enhanced.Settings.Mine.CreatorCenter",
-								"name": "创作中心",
-								"val": [],
-								"type": "checkboxes",
-								"items": [
-									{
-										"key": "171_786",
-										"label": "创作首页(iOS/ipadOS)"
-									},
-									{
-										"key": "172_787",
-										"label": "稿件管理(iOS/ipadOS)"
-									},
-									{
-										"key": "174_788",
-										"label": "有奖活动(iOS/ipadOS)"
-									},
-									{
-										"key": "533",
-										"label": "任务中心"
-									},
-									{
-										"key": "707",
-										"label": "主播中心"
-									},
-									{
-										"key": "708",
-										"label": "主播活动"
-									},
-									{
-										"key": "709",
-										"label": "开播福利"
-									},
-									{
-										"key": "710",
-										"label": "我的直播"
-									},
-									{
-										"key": "785",
-										"label": "投稿(ipadOS)"
-									}
-								],
-								"desc": "白色版本APP不存在此选项(未单独注明选项皆为iOS版本)"
+								"id": "@BiliBili.ADBlock.Settings.Detail.splash",
+								"name": "[开屏]去广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
 							},
 							{
-								"id": "@BiliBili.Enhanced.Settings.Mine.Recommend",
-								"name": "推荐服务",
-								"val": [
-									"400_794",
-									"402",
-									"403",
-									"404_791",
-									"789",
-									"790",
-									"791",
-									"2542",
-									"794"
-								],
-								"type": "checkboxes",
-								"items": [
-									{
-										"key": "400_794",
-										"label": "我的课程(iOS/ipadOS)"
-									},
-									{
-										"key": "401",
-										"label": "看视频免流量"
-									},
-									{
-										"key": "402",
-										"label": "个性装扮"
-									},
-									{
-										"key": "403",
-										"label": "游戏中心"
-									},
-									{
-										"key": "404_791",
-										"label": "我的钱包(iOS/ipadOS)"
-									},
-									{
-										"key": "406_792",
-										"label": "直播中心(iOS/ipadOS)"
-									},
-									{
-										"key": "423",
-										"label": "邀好友赚红包"
-									},
-									{
-										"key": "514",
-										"label": "社区中心"
-									},
-									{
-										"key": "544",
-										"label": "创作中心"
-									},
-									{
-										"key": "622",
-										"label": "会员购中心"
-									},
-									{
-										"key": "924",
-										"label": "哔哩哔哩公益"
-									},
-									{
-										"key": "990",
-										"label": "能量加油站"
-									},
-									{
-										"key": "789",
-										"label": "我的关注(ipadOS)"
-									},
-									{
-										"key": "790",
-										"label": "我的消息(ipadOS)"
-									},
-									{
-										"key": "793",
-										"label": "大会员(ipadOS)"
-									},
-									{
-										"key": "2542",
-										"label": "我的游戏(ipadOS)"
-									}
-								],
-								"desc": "白色版本APP不存在此选项(未单独注明选项皆为iOS版本)"
+								"id": "@BiliBili.ADBlock.Settings.Detail.feed",
+								"name": "[推荐]去广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
 							},
 							{
-								"id": "@BiliBili.Enhanced.Settings.Mine.More",
-								"name": "更多服务",
-								"val": [
-									"407",
-									"410_798",
-									"1028",
-									"797"
-								],
-								"type": "checkboxes",
-								"items": [
-									{
-										"key": "407",
-										"label": "联系客服"
-									},
-									{
-										"key": "410_798",
-										"label": "设置(iOS/ipadOS)"
-									},
-									{
-										"key": "741",
-										"label": "我的钱包（白色版）"
-									},
-									{
-										"key": "742",
-										"label": "稿件管理（白色版）"
-									},
-									{
-										"key": "812",
-										"label": "听视频"
-									},
-									{
-										"key": "950",
-										"label": "青少年模式（概念版）"
-									},
-									{
-										"key": "964_1070",
-										"label": "青少年守护(iOS/ipadOS)"
-									},
-									{
-										"key": "1028",
-										"label": "我的NFT"
-									},
-									{
-										"key": "797",
-										"label": "我的客服(ipadOS)"
-									}
-								],
-								"desc": "未单独注明选项皆为iOS版本"
+								"id": "@BiliBili.ADBlock.Settings.Detail.blockUpLiveList",
+								"name": "[推荐]屏蔽自定义up主直播推广",
+								"type": "text",
+								"desc": "填写up主uid,以英文逗号隔开,不填不屏蔽"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.activity",
+								"name": "[推荐]去除“活动大图”",
+								"val": false,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.story",
+								"name": "[首页]去除短视频流广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.cinema",
+								"name": "[番剧电影]去除广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.view",
+								"name": "[用户投稿]去除视频广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.search",
+								"name": "[搜索]去除广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.commandDms",
+								"name": "[弹幕]去除交互式弹幕",
+								"val": false,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.colorfulDms",
+								"name": "[弹幕]替换大会员弹幕",
+								"val": false,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.MainList",
+								"name": "[评论区]去除广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.xlive",
+								"name": "[直播]去除广告",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.Hot_search",
+								"name": "[搜索]去除“热搜”",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.Hot_topics",
+								"name": "[动态]去除“热门话题”",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.Most_visited",
+								"name": "[动态]去除“最常访问”",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
+							},
+							{
+								"id": "@BiliBili.ADBlock.Settings.Detail.Dynamic_adcard",
+								"name": "[动态]去除广告动态",
+								"val": true,
+								"type": "boolean",
+								"desc": "是否启用关闭广告"
 							}
 						]
 				}
