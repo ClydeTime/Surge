@@ -366,6 +366,47 @@ function Env(name, opts) {
 
     /**
      *
+     * @param {String} url
+     * @returns {url} 将 'http://url.com/page?name=Adam&surname=Smith' 替换为 'http://url.com/page'
+     */
+    getBaseURL(url) {
+      return url.replace(/[?#].*$/, '')
+    }
+
+    /**
+     *
+     * @param {String} url
+     * @returns {url} 判断URL是否为绝对路径 eg. isAbsoluteURL('/foo/bar') // false
+     */
+    isAbsoluteURL(str) {
+      return /^[a-z][a-z0-9+.-]*:/.test(str)
+    }
+
+    /**
+     *
+     * @param {String} url
+     * @returns {url} 将 URL 参数转换为对象 eg. getURLParameters('http://url.com/page?name=Adam&surname=Smith') // {name: 'Adam', surname: 'Smith'}
+     */
+    getURLParameters(url) {
+      return (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
+        (a, v) => (
+          (a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a
+        ),
+        {}
+      )
+    }
+
+    /**
+     *
+     * @param {Date} date
+     * @returns {url} 从日期生成 UNIX 时间戳
+     */
+    getTimestamp(date = new Date()) {
+      Math.floor(date.getTime() / 1000)
+    }
+
+    /**
+     *
      * @param {Object} options
      * @returns {String} 将 Object 对象 转换成 queryStr: key=val&name=senku
      */
