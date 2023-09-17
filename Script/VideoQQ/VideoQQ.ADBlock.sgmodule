@@ -1,0 +1,11 @@
+#!name=📺 VideoQQ: 🛡️ ADBlock
+#!desc=腾讯视频：去广告
+#!author = @小白脸
+#!update = 2023-09-17
+
+[Rule]
+# > 腾讯视频 去开屏
+OR,((DOMAIN,pgdt.gtimg.cn), (AND,((USER-AGENT,live4iphoneRel*), (IP-CIDR,0.0.0.0/0,no-resolve)))),REJECT-DROP
+//视频
+AND,((PROTOCOL,HTTPS), (DOMAIN,iacc.qq.com)),REJECT-NO-DROP
+DOMAIN,config.ab.qq.com,REJECT
