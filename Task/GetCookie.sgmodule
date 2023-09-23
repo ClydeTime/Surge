@@ -1,5 +1,5 @@
 #!name=Cookie获取-MK
-#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅, NGA, 腾讯视频, 贴吧; 请在使用后手动将其禁用，以免产生不必要的MITM.
+#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅, NGA, 腾讯视频, 贴吧, 建行生活; 请在使用后手动将其禁用，以免产生不必要的MITM.
 #!system=ios
 
 [Rule]
@@ -21,5 +21,7 @@ NGA玩家社区Cookie = type=http-request,pattern=^https?:\/\/ngabbs.com\/nuke.p
 
 贴吧Cookie2 = type=http-request,pattern=^https?:\/\/c\.tieba\.baidu\.com\/c\/u\/follow\/getFoldedMessageUserInfo,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/TieBa.js,requires-body=0
 
+建行生活Cookie = type=http-request,pattern=^https:\/\/yunbusiness\.ccb\.com\/clp_coupon\/txCtrl\?txcode=A3341A040,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/CCBLife.js,requires-body=1
+
 [MITM]
-hostname = %APPEND% app.bilibili.com, m.bilibili.com, mobile.ximalaya.com, mobwsa.ximalaya.com, mobilehera.ximalaya.com, ngabbs.com, iacc.rec.qq.com, c.tieba.baidu.com, tiebac.baidu.com
+hostname = %APPEND% app.bilibili.com, m.bilibili.com, mobile.ximalaya.com, mobwsa.ximalaya.com, mobilehera.ximalaya.com, ngabbs.com, iacc.rec.qq.com, c.tieba.baidu.com, tiebac.baidu.com, yunbusiness.ccb.com
