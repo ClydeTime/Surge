@@ -46,19 +46,19 @@ var message='', node='', channel, adiu='', userId='', actID='', playID='', Cooki
 		$.msg($.name, '', '❌请先获取sessionid🎉');
 		return;
 	}
-	message += `----------微信小程序签到----------\n`;
+	message += `①微信小程序签到=> `;
 	node = 'wechatMP', channel = 'h5_common', actID = '4zRzeQUM8eb', playID = '4zRA5kwg75G';
-	await checkIn(); isOk && (await signIn());
+	await checkIn(); isOk && isSign!=1 && (await signIn());
 
-	message += `----------高德地图APP签到----------\n`;
+	message += `②高德地图APP签到=> `;
 	node = 'Amap', channel = 'h5_common', actID = '4yQc1Mt8nzJ', playID = '4yQcyzXdkYU';
-	await checkIn(); isOk && (await signIn());
+	await checkIn(); isOk && isSign!=1 && (await signIn());
 
-	message += `----------支付宝小程序签到----------\n`;
+	message += `③支付宝小程序签到=> `;
 	node = 'alipayMini', channel = 'alipay_mini', actID = '4zRAarAdbrf', playID = '4zRANYHwdgJ';
-	await checkIn(); isOk && (await signIn());
+	await checkIn(); isOk && isSign!=1 && (await signIn());
 	$.log(message);
-	$.msg(message);
+	$.msg($.name, '', message);
 })()
 	.catch((e) => {
 		$.log("", `❌失败! 原因: ${e}!`, "");
@@ -216,7 +216,7 @@ function checkIn() {
 							signTerm = obj?.data?.playMap?.dailySign?.signTerm;
 							signDay = t.day;
 							isSign = t.isSign;//isSign = 1 为签到过，懒得管了，让它再提交一次吧
-							message += `查询:${t.date} isSign=${isSign}\n`;
+							message += `${t.date} 签到状态:${isSign == 1 ? '✅' : '待签到'}\n`;
 							return isOk = true;//查询结果
 						}
 					})
@@ -247,7 +247,7 @@ function signIn() {
 			try {
 				var obj = $.toObj(data);
 				if(obj?.code == '1'){
-					message += `签到:签到成功\n`;
+					message += `签到:✅签到成功\n`;
 				}else{
 					message += `签到:${obj?.message}\n`;
 				}
