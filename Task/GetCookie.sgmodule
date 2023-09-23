@@ -1,5 +1,5 @@
 #!name=Cookie获取-MK
-#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅, NGA, 腾讯视频, 贴吧, 建行生活; 请在使用后手动将其禁用，以免产生不必要的MITM.
+#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅, NGA, 腾讯视频, 贴吧, 建行生活, 高德打车; 请在使用后手动将其禁用，以免产生不必要的MITM.
 #!system=ios
 
 [Rule]
