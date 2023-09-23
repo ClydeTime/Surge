@@ -1,0 +1,8 @@
+#!name=建行生活签到
+#!desc=建行生活自动签到
+# 任务奖励：骑行卡/外卖券
+# 脚本作者：FoKit
+# 更新时间：2023-09-21
+
+[Script]
+建行生活签到 = type=cron,cronexp=17 7 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/CCBLife.js
