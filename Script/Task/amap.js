@@ -88,9 +88,9 @@ function getToken() {
 	}
 }
 
-const getKey = () => {
+function getKey() {
 	for (var t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678', n = t.length, r = "", i = 0; i < 16; i++)
-		r += t.charAt(Math.floor(Math.random() * n));
+			r += t.charAt(Math.floor(Math.random() * n));
 	return r
 }
 function getSign(channel) {
@@ -192,7 +192,6 @@ function checkIn() {
 		const rest = {url: url, body: body, headers: headers};
 		$.post(rest, (err, resp, data) => {
 			try {
-				debug("resp查询："+data)
 				var obj = $.toObj(data);
 				if(obj?.code == '1'){
 					obj?.data?.playMap?.dailySign?.signList.forEach(t => {
@@ -229,7 +228,6 @@ function signIn() {
 		const rest = {url: url, body: body, headers: headers};
 		$.post(rest, (err, resp, data) => {
 			try {
-				debug('resp签到：'+data)
 				var obj = $.toObj(data);
 				if(obj?.code == '1'){
 					message += `签到:签到成功\n`;
