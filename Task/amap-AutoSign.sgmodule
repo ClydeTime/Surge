@@ -1,0 +1,7 @@
+#!name=高德打车签到
+#!desc=高德打车签到
+# 脚本作者：灰佬（苍井灰灰）
+# 更新时间：2023-09-23
+
+[Script]
+高德打车签到 = type=cron, cronexp="1 0 * * *", script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/amap.js, wake-system=1
