@@ -21,7 +21,9 @@ NGA玩家社区Cookie = type=http-request,pattern=^https?:\/\/ngabbs.com\/nuke.p
 
 贴吧Cookie2 = type=http-request,pattern=^https?:\/\/c\.tieba\.baidu\.com\/c\/u\/follow\/getFoldedMessageUserInfo,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/TieBa.js,requires-body=0
 
-建行生活Cookie = type=http-request,pattern=^https:\/\/yunbusiness\.ccb\.com\/clp_coupon\/txCtrl\?txcode=A3341A040,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/CCBLife.js,requires-body=1
+建行生活Cookie = type=http-request,pattern=^https?:\/\/yunbusiness\.ccb\.com\/clp_coupon\/txCtrl\?txcode=A3341A040,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/CCBLife.js,requires-body=1
+
+高德打车Cookie = type=http-response,pattern=^https?:\/\/(m5|dache)\.amap\.com\/(ws\/yuece\/(act|openapi\/activity\/current)\/query|common\/(alipaymini|wxmini)\?_ENCRYPT=),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/amap.js,requires-body=1 
 
 [MITM]
-hostname = %APPEND% app.bilibili.com, m.bilibili.com, mobile.ximalaya.com, mobwsa.ximalaya.com, mobilehera.ximalaya.com, ngabbs.com, iacc.rec.qq.com, c.tieba.baidu.com, tiebac.baidu.com, yunbusiness.ccb.com
+hostname = %APPEND% app.bilibili.com, m.bilibili.com, mobile.ximalaya.com, mobwsa.ximalaya.com, mobilehera.ximalaya.com, ngabbs.com, iacc.rec.qq.com, c.tieba.baidu.com, tiebac.baidu.com, yunbusiness.ccb.com, m5.amap.com, dache.amap.com
