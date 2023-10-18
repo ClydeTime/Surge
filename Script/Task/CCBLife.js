@@ -3,10 +3,6 @@ const body_key = 'JHSH_BODY';
 let giftType = '2';
 let bodyStr = $.getdata(body_key) || '';
 let message = '';
-let giftMap = {
-  "1": "打车",
-  "2": "外卖"
-};
 
 !(async () => {
   if (typeof $request != "undefined") {
@@ -20,7 +16,6 @@ let giftMap = {
   } else {
     $.info = $.toObj(bodyStr)
     $.giftList = [];
-    $.giftList2 = [];
     $.getGiftMsg = "";
     $.isGetGift = false;
     $.log(`===== 账号[${hideSensitiveData($.info?.USR_TEL, 3, 4) || $.index}]开始签到 =====\n`);
@@ -28,31 +23,8 @@ let giftMap = {
       message += `🎉 账号 [${hideSensitiveData($.info?.USR_TEL, 3, 4) || $.index}] 缺少MID参数，请重新获取Cookie。\n`;
     }
     await main();
-    if ($.giftList.length > 0) {
-      for (let j = 0; j < $.giftList.length; j++) {
-        if ($.isGetGift) break;
-        let item = $.giftList[j]
-        $.couponId = item?.couponId;
-        $.nodeDay = item?.nodeDay;
-        $.couponType = item?.couponType;
-        $.dccpBscInfSn = item?.dccpBscInfSn;
-        $.continue = false;
-        $.log(`尝试领取[${giftMap[giftType]}]券`);
-        for (let k = 1; k <= 3; k++) {
-          if (!$.continue) {
-            if (k >= 2) $.log(`领取失败，重试一次`);
-            await $.wait(1000 * 5);
-            await getGift();
-            if ($.isGetGift) break;
-          }
-        }
-      };
-      if (!$.isGetGift) {
-        $.getGiftMsg = `请打开app查看优惠券到账情况。\n`;
-      }
-      message += "，" + $.getGiftMsg;
-    }
-    await $.wait(1000 * 3);
+    await getGift();
+    await $.wait(1000);
   }
 
   if (message) {
@@ -115,19 +87,10 @@ function main() {
               $.GIFT_BAG = data?.data?.GIFT_BAG;
               $.GIFT_BAG.forEach(item => {
                 let body = { "couponId": item.couponId, "nodeDay": item.nodeDay, "couponType": item.couponType, "dccpBscInfSn": item.dccpBscInfSn };
-                if (new RegExp(`${giftMap[giftType]}`).test(item?.couponName)) {
-                  if (/信用卡/.test(item?.couponName)) {
-                    $.giftList.unshift(body);
-                  } else {
-                    $.giftList.push(body);
-                  }
-                } else {
-                  $.giftList2.push(body);
-                }
+                $.giftList.push(body);
               })
-              $.giftList = [...$.giftList, ...$.giftList2];
             } else if (data?.data?.NEST_AWARD_DAY >= 1) {
-              text = `继续签到${data.data.NEST_AWARD_DAY}天可领取${giftMap[giftType]}券`;
+              text = `继续签到${data.data.NEST_AWARD_DAY}天可领取签到奖励`;
               message += `，${text}\n`;
               $.log(text);
             } else {
@@ -155,40 +118,49 @@ function main() {
 
 // 领取奖励
 async function getGift() {
-  let opt = {
-    url: `https://yunbusiness.ccb.com/clp_coupon/txCtrl?txcode=A3341C082`,
-    headers: {
-      "MID": $.info?.MID,
-      "Content-Type": "application/json;charset=utf-8",
-      "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/CloudMercWebView/UnionPay/1.0 CCBLoongPay",
-      "Accept": "application/json,text/javascript,*/*"
-    },
-    body: `{"mebId":"${$.info.MEB_ID}","actId":"${$.info.ACT_ID}","nodeDay":${$.nodeDay},"couponType":${$.couponType},"nodeCouponId":"${$.couponId}","dccpBscInfSn":"${$.dccpBscInfSn}","chnlType":"${$.info.chnlType}","regionCode":"${$.info.regionCode}"}`
-  }
-  return new Promise(resolve => {
-    $.post(opt, async (err, resp, data) => {
-      try {
-        err && $.log(err);
-        if (data) {
-          data = $.toObj(data);
-          if (data.errCode == 0) {
-            $.isGetGift = true;
-            $.getGiftMsg = `获得签到奖励：${data?.data?.title}（${data?.data?.subTitle}）\n`;
-            $.log($.getGiftMsg);
-          } else {
-            $.continue = true;
-            $.log($.toStr(data));
-          }
-        } else {
-          $.log("服务器返回了空数据");
-        }
-      } catch (error) {
-        $.log(error);
-      } finally {
-        resolve();
+  let getGiftActs = []
+  for (let gl of $.giftList) {
+    $.couponId = gl?.couponId;
+    $.nodeDay = gl?.nodeDay;
+    $.couponType = gl?.couponType;
+    $.dccpBscInfSn = gl?.dccpBscInfSn;
+    const getGiftAct = (resolve) => {
+      let opt = {
+        url: `https://yunbusiness.ccb.com/clp_coupon/txCtrl?txcode=A3341C082`,
+        headers: {
+          "MID": $.info?.MID,
+          "Content-Type": "application/json;charset=utf-8",
+          "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/CloudMercWebView/UnionPay/1.0 CCBLoongPay",
+          "Accept": "application/json,text/javascript,*/*"
+        },
+        body: `{"mebId":"${$.info.MEB_ID}","actId":"${$.info.ACT_ID}","nodeDay":${$.nodeDay},"couponType":${$.couponType},"nodeCouponId":"${$.couponId}","dccpBscInfSn":"${$.dccpBscInfSn}","chnlType":"${$.info.chnlType}","regionCode":"${$.info.regionCode}"}`
       }
-    })
-  })
+      $.post(opt, (err, resp, data) => {
+        try {
+          err && $.log(err);
+          if (data) {
+            data = $.toObj(data);
+            if (data.errCode == 0) {
+              $.getGiftMsg = `获得签到奖励：${data?.data?.title}（${data?.data?.subTitle}）\n`;
+              $.log($.getGiftMsg);
+            } else {
+              $.log($.toStr(data));
+            }
+          } else {
+            $.log("服务器返回了空数据");
+          }
+        } catch (error) {
+          $.log(error);
+        } finally {
+          resolve();
+        }
+      })
+    }
+    getGiftActs.push(new Promise(getGiftAct));
+  }
+  $.log('', `⏳ 正在领取 ${getGiftActs.length} 个签到任奖励!`);
+  await Promise.all(getGiftActs);
+  getGiftActs = [];
 }
 
 // 数据脱敏
