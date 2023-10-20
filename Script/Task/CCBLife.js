@@ -23,7 +23,7 @@ let message = '';
       message += `🎉 账号 [${hideSensitiveData($.info?.USR_TEL, 3, 4) || $.index}] 缺少MID参数，请重新获取Cookie。\n`;
     }
     await main();
-    await getGift();
+		($.giftList.length > 0) && await getGift();
     await $.wait(1000);
   }
 
@@ -158,9 +158,9 @@ async function getGift() {
     }
     getGiftActs.push(new Promise(getGiftAct));
   }
-  $.log('', `⏳ 正在领取 ${getGiftActs.length} 个签到任奖励!`);
-  await Promise.all(getGiftActs);
-  getGiftActs = [];
+	$.log('', `⏳ 正在领取 ${getGiftActs.length} 个签到任务奖励!`);
+	await Promise.all(getGiftActs);
+	getGiftActs = [];
 }
 
 // 数据脱敏
