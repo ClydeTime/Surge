@@ -98,7 +98,7 @@ function main() {
       "Accept": "application/json,text/javascript,*/*",
       "content-type": "application/json"
     },
-    body: `{"ACT_ID":"${$.info.ACT_ID}","MEB_ID":"${$.info.MEB_ID}","USR_TEL":"${$.info.USR_TEL}","REGION_CODE":"${$.info.REGION_CODE}","chnlType":"${$.info.chnlType}","regionCode":"${$.info.regionCode}"}`
+    body: `{"ACT_ID":"${$.info.ACT_ID}","APPEND_PARAM":"${$.info.APPEND_PARAM}","REGION_CODE":"${$.info.REGION_CODE}","chnlType":"${$.info.chnlType}","regionCode":"${$.info.regionCode}"}`
   }
   return new Promise(resolve => {
     $.post(opt, async (err, resp, data) => {
