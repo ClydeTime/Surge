@@ -67,7 +67,7 @@ let giftMap = {
 
 // 获取签到数据
 function GetCookie() {
-  if ($request && $request.url.indexOf("A3341A040") > -1) {
+  if ($request && $request.url.indexOf("A3341A115") > -1) {
     $.body = $.toObj($request.body);
     if (bodyStr.indexOf('MID') == -1) {
       bodyStr = '';
@@ -90,7 +90,7 @@ function GetCookie() {
 // 签到主函数
 function main() {
   let opt = {
-    url: `https://yunbusiness.ccb.com/clp_coupon/txCtrl?txcode=A3341A040`,
+    url: `https://yunbusiness.ccb.com/clp_coupon/txCtrl?txcode=A3341A115`,
     headers: {
       "MID": $.info?.MID,
       "Content-Type": "application/json;charset=utf-8",
