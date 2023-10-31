@@ -24,9 +24,9 @@ let bodyStr =$.getdata('JHSH_BODY') || '';  // 签到所需的 body
 		$.DeviceId = $.info2['DeviceId'];
 		$.MBCUserAgent = $.info2['MBCUserAgent'];
 		$.ALBody = $.info2['Body'];
-    $.log(`===== 账号[${hideSensitiveData($.info?.USR_TEL, 3, 4)}]开始签到 =====\n`);
+    $.log(`===== 账号[${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '🤒匿名用户'}]开始签到 =====\n`);
     if (!$.info?.MID || !$.DeviceId || !$.MBCUserAgent || !$.ALBody) {
-      message += `🎉 账号 [${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '信息获取失败'}] 缺少参数，请重新获取Cookie。\n`;
+      message += `🎉 账号 [${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '🤒匿名用户'}] 缺少参数，请重新获取Cookie。\n`;
     }
 		await autoLogin();  // 刷新 session
     await main(); // 签到主函数
@@ -152,7 +152,7 @@ function main() {
           data = $.toObj(data);
           let text = '';
           if (data.errCode == 0) {
-            text = `🎉 账号 [${$.info?.USR_TEL ?hideSensitiveData($.info?.USR_TEL, 3, 4) : '信息获取失败'}] 签到成功`;
+            text = `🎉 账号 [${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '🤒匿名用户'}] 签到成功`;
             $.log(text);
             message += text;
             if (data?.data?.IS_AWARD == 1) {
@@ -180,7 +180,7 @@ function main() {
             }
           } else {
             $.log($.toStr(data));
-            text = `❌ 账号 [${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '信息获取失败'}] 签到失败，${data.errMsg}\n`;
+            text = `❌ 账号 [${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '🤒匿名用户'}] 签到失败，${data.errMsg}\n`;
             $.log(text);
             message += text;
           }
@@ -256,7 +256,7 @@ async function getLatestVersion() {
             $.log(e);
           };
         } else {
-          $.log(`版本信息获取失败\n`);
+          $.log(`版本🤒匿名用户\n`);
         }
       } catch (error) {
         $.log(error);
