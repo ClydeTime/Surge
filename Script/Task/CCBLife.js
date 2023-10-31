@@ -15,6 +15,7 @@ let bodyStr =$.getdata('JHSH_BODY') || '';  // 签到所需的 body
     return;
   } else {
 		await getLatestVersion();  // 获取版本信息
+		$.token = '';
     $.info = $.toObj(bodyStr);
 		$.info2 = $.toObj(autoLoginInfo);
     $.giftList = [];
@@ -27,8 +28,10 @@ let bodyStr =$.getdata('JHSH_BODY') || '';  // 签到所需的 body
     $.log(`===== 账号[${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '🤒匿名用户'}]开始签到 =====\n`);
     if (!$.info?.MID || !$.DeviceId || !$.MBCUserAgent || !$.ALBody) {
       message += `🎉 账号 [${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '🤒匿名用户'}] 缺少参数，请重新获取Cookie。\n`;
+			return;
     }
 		await autoLogin();  // 刷新 session
+		if (!$.token) return;
     await main(); // 签到主函数
     if ($.giftList.length > 0) {
       for (let j = 0; j < $.giftList.length; j++) {
@@ -118,9 +121,16 @@ async function autoLogin() {
           // $.token = $.getdata('JHSH_TOKEN');
           $.log(`${result?.errMsg}`);
         } else {
-          // $.token = response.headers[`set-cookie`] || response.headers[`Set-cookie`] || response.headers[`Set-Cookie`];
+					const set_cookie = response.headers['set-cookie'] || response.headers['Set-cookie'] || response.headers['Set-Cookie'];
           // !$.isNode() ? $.setdata($.token, 'JHSH_TOKEN') : '';  // 数据持久化
-          $.log(`✅ 刷新 session 成功!`);
+          let new_cookie = $.toStr(set_cookie).match(/SESSION=([a-f0-9-]+);/);
+          if (new_cookie) {
+            $.token = new_cookie[0];
+            $.log(`✅ 刷新 session 成功!`);
+          } else {
+            message += `❌ 账号 [${$.info?.USR_TEL ? hideSensitiveData($.info?.USR_TEL, 3, 4) : '🤒匿名用户'}] 刷新 session 失败，请重新获取Cookie。\n`;
+            $.log(`⛔️ 刷新 session 失败`);
+          }
         }
       } catch (error) {
         $.log(error);
@@ -140,7 +150,8 @@ function main() {
       "Content-Type": "application/json;charset=utf-8",
       "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/CloudMercWebView/UnionPay/1.0 CCBLoongPay",
       "Accept": "application/json,text/javascript,*/*",
-      "content-type": "application/json"
+      "content-type": "application/json",
+			"Cookie": $.token
     },
     body: `{"ACT_ID":"${$.info.ACT_ID}","REGION_CODE":"${$.info.REGION_CODE}","chnlType":"${$.info.chnlType}","regionCode":"${$.info.regionCode}"}`
   }
