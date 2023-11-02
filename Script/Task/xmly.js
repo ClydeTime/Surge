@@ -200,7 +200,7 @@ async function main() {
             spec_message = `🟢 今日特殊任务已全部完成`   
         }
         $.log(spec_message)
-        let message = `🟢【恭喜】签到状态:签到成功 \n` + `${watch_message}\n` + `${gene_message}\n` + `${spec_message}\n` + "- 其中特殊任务完成进度以app内完成度为准"
+        let message = `🟢【恭喜】签到状态:签到成功 \n` + `${watch_message}\n` + `${spec_message}\n` + "- 其中特殊任务完成进度以app内完成度为准"
         $.msg(zh_name, "", message)
     } else {
         let message = `🔴【抱歉】签到状态:签到失败 \n` + "请重新获取cookie"
