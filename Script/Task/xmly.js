@@ -1,7 +1,7 @@
 /*
 喜马拉雅签到脚本
 
-更新时间: 2023-01-06
+更新时间: 2023-11-02
 脚本兼容: Surge
 脚本作者: MartinsKing
 软件功能: 喜马拉雅每日签到
@@ -79,7 +79,7 @@ function getCookie() {
         if (headers) $.setdata(headers, name + "_headers")
         $.setdata("", name + "_watch")
         $.setdata("", name + "_spec")
-        $.setdata("", name + "_gene")
+        //$.setdata("", name + "_gene")
         $.msg(zh_name, "", "- 喜马拉雅获取cookie成功")
     }
 }
@@ -88,13 +88,13 @@ async function main() {
     config.headers = $.getjson(name + "_headers", {})
     config.watch = $.getjson(name + "_watch", {})
     config.spec = $.getjson(name + "_spec", {})
-    config.gene = $.getjson(name + "_gene", {})
+    //config.gene = $.getjson(name + "_gene", {})
     config.xm_cookie = `${typeof config['headers']['Cookie']=='undefined' ? config['headers']['cookie'] : config['headers']['Cookie']}`
     let sign_flag = await xmlySign()
     
     if(sign_flag){
         let watch_message = ""
-        let gene_message = ""
+        //let gene_message = ""
         let spec_message = ""
 
         inspect("watch")
@@ -120,7 +120,7 @@ async function main() {
         }
         console.log(watch_message)
 
-        inspect("gene")
+/*         inspect("gene")
 
         if (check("gene", 6)) {
             let gene_flag = true
@@ -151,7 +151,7 @@ async function main() {
         } else {
             gene_message = `🟢 今日通用任务已全部完成`
         }
-        console.log(gene_message)
+        console.log(gene_message) */
 
         inspect("spec")
 
@@ -742,7 +742,7 @@ async function adVideoFinish(token){
             body = JSON.parse(response.body)
             if (body.ret == 0) {
                 if (body.data.status == 0) {
-                    console.log("- 本条视频广告观看已完成, 获得40点奖励")
+                    console.log("- 本条视频广告观看已完成, 获得50点奖励")
                     config.watch.num += 1
                     config.watch.time = format(startTime)
                     $.setdata(JSON.stringify(config.watch), name + "_watch")
