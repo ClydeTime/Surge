@@ -68,7 +68,7 @@ const config = {
         $.log("- 正在获取cookie, 请稍后")
         getCookie()
     } else { 
-        main()
+       await main()
     }
 })()
 	.catch((e) => $.logErr(e))
