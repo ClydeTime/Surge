@@ -92,7 +92,7 @@ async function main() {
     config.xm_cookie = `${typeof config['headers']['Cookie']=='undefined' ? config['headers']['cookie'] : config['headers']['Cookie']}`
     let sign_flag = await xmlySign()
     
-    if(sign_flag){
+    if (sign_flag) {
         let watch_message = ""
         //let gene_message = ""
         let spec_message = ""
@@ -165,10 +165,10 @@ async function main() {
             await cancelVoiceLike()
             await userAdd()
             await userDelete()
-            let actCode = await jumpDzdp()
+            /* let actCode = await jumpDzdp()
             if (actCode != "") {
                 await dzdpComplete(actCode)
-            }
+            } */
             let uid = await getUid()
             let content = urlencode(await wyy())
             let commentId = await createComment(uid, content)
@@ -185,12 +185,12 @@ async function main() {
             config.spec.time = format(startTime)
             $.setdata(JSON.stringify(config.spec), name + "_spec")
 
-            let listset = [96, 168, 169, 170, 171, 172, 217]     //任务列表分别为「分享声音, 收藏声音, 动态点赞, 声音点赞, 关注用户, 声音评论, 大众点评」
+            let listset = [96, 168, 169, 170, 171, 172]     //任务列表分别为「分享声音, 收藏声音, 动态点赞, 声音点赞, 关注用户, 声音评论, 大众点评(217已失效)」
             for (let i=0; i<listset.length; i++) {
                await handInGeneralTask(listset[i])
             }
 
-            if (config.spec.num = 7) {
+            if (config.spec.num == 6) {
                 spec_message = `🟢 今日特殊任务已全部完成`
             } else {
                 spec_message = `🟡 今日特殊任务尚未全部完成,请查看日志`
@@ -201,7 +201,7 @@ async function main() {
         console.log(spec_message)
         let message = `🟢【恭喜】签到状态:签到成功 \n` + `${watch_message}\n` + `${gene_message}\n` + `${spec_message}\n` + "- 其中特殊任务完成进度以app内完成度为准"
         $.msg(zh_name, "", message)
-    }else{
+    } else {
         let message = `🔴【抱歉】签到状态:签到失败 \n` + "请重新获取cookie"
         console.log(message)
         $.msg(zh_name, "", message)
