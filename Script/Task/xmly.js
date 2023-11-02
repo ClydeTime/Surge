@@ -155,7 +155,7 @@ async function main() {
 
         inspect("spec")
 
-        if (check("spec", 5)) {
+        if (check("spec", 4)) {
             await share()
             await voiceAdd()
             await voiceDelete()
@@ -185,12 +185,12 @@ async function main() {
             config.spec.time = format(startTime)
             $.setdata(JSON.stringify(config.spec), name + "_spec")
 
-            let listset = [96, 168, 169, 170, 171, 172]     //任务列表分别为「分享声音, 收藏声音, 动态点赞, 声音点赞, 关注用户, 声音评论, 大众点评(217已失效)」
+            let listset = [96, 168, 169, 170, 171]     //任务列表分别为「分享声音, 收藏声音, 动态点赞, 声音点赞, 关注用户, 声音评论(172已失效), 大众点评(217已失效)」
             for (let i=0; i<listset.length; i++) {
                await handInGeneralTask(listset[i])
             }
 
-            if (config.spec.num == 6) {
+            if (config.spec.num == 5) {
                 spec_message = `🟢 今日特殊任务已全部完成`
             } else {
                 spec_message = `🟡 今日特殊任务尚未全部完成,请查看日志`
