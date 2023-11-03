@@ -90,7 +90,7 @@ async function main() {
     config.watch = $.getjson(name + "_watch", {})
     config.spec = $.getjson(name + "_spec", {})
     //config.gene = $.getjson(name + "_gene", {})
-    config.xm_cookie = `${typeof config['headers']['Cookie']=='undefined' ? config['he$.logaders']['cookie'] : config['headers']['Cookie']}`
+    config.xm_cookie = `${typeof config['headers']['Cookie']=='undefined' ? config['headers']['cookie'] : config['headers']['Cookie']}`
     let sign_flag = await xmlySign()
     
     if (sign_flag) {
@@ -820,30 +820,30 @@ async function handInGeneralTask(taskId){
             body = JSON.parse(response.body)
             if (body.ret == 0) {
                 if (body.data.status == 0) { 
-                    if ((taskId > 167 && taskId < 173) || taskId == 96 || taskId == 217) {
+                    if ((taskId > 167 && taskId < 173) || taskId == 96 || taskId == 336) {
                         config.spec.num += 1
                         config.spec.time = format(startTime)
                         $.setdata(JSON.stringify(config.spec), name + "_spec")
                         $.log("- 交还特殊任务成功, 获得奖励点数")
-                    } else {
+                    } /* else {
                         config.gene.num += 1
                         config.gene.time = format(startTime)
                         $.setdata(JSON.stringify(config.gene), name + "_gene")
                         $.log("- 交还通用任务成功, 获得10点奖励")
-                    }
+                    } */
                     return true
                 } else if (body.data.status == 1) {
-                    if ((taskId > 167 && taskId < 173) || taskId == 96 || taskId == 217) {
+                    if ((taskId > 167 && taskId < 173) || taskId == 96 || taskId == 336) {
                         config.spec.num += 1
                         config.spec.time = format(startTime)
                         $.setdata(JSON.stringify(config.spec), name + "_spec")
                         $.log("- 此项特殊任务今日已交还")
-                    } else {
+                    } /* else {
                         config.gene.num += 1
                         config.gene.time = format(startTime)
                         $.setdata(JSON.stringify(config.gene), name + "_gene")
                         $.log("- 此项通用任务今日已交还")
-                    }
+                    } */
                     return true
                 } else if (body.data.status == -1) {
                     $.log("--- !!!此任务尚未完成,不能交还")
