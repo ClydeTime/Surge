@@ -1,5 +1,5 @@
 #!name=Cookie获取-MK
-#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅, NGA, 腾讯视频, 贴吧, 建行生活, 高德打车; 请在使用后手动将其禁用，以免产生不必要的MITM.
+#!desc=该模块适用于定时签到脚本的Cookie获取. 集成: BiliBili, 喜马拉雅, NGA, 腾讯视频, 贴吧, 建行生活, 高德打车, 阿里云盘; 请在使用后手动将其禁用，以免产生不必要的MITM.
 #!system=ios
 
 [Rule]
@@ -25,5 +25,7 @@ NGA玩家社区Cookie = type=http-request,pattern=^https?:\/\/ngabbs.com\/nuke.p
 
 高德打车Cookie = type=http-response,pattern=^https?:\/\/(m5|dache)\.amap\.com\/(ws\/yuece\/(act|openapi\/activity\/current)\/query|common\/(alipaymini|wxmini)\?_ENCRYPT=),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/amap.js,requires-body=1 
 
+阿里云盘Token = type=http-request,pattern=^https:\/\/auth\.alipan\.com\/v2\/account\/token,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/ADrive.js,requires-body=1 
+
 [MITM]
-hostname = %APPEND% app.bilibili.com, m.bilibili.com, xmc.ximalaya.com, ngabbs.com, iacc.rec.qq.com, c.tieba.baidu.com, tiebac.baidu.com, yunbusiness.ccb.com, m5.amap.com, dache.amap.com
+hostname = %APPEND% app.bilibili.com, m.bilibili.com, xmc.ximalaya.com, ngabbs.com, iacc.rec.qq.com, c.tieba.baidu.com, tiebac.baidu.com, yunbusiness.ccb.com, m5.amap.com, dache.amap.com, auth.alipan.com
