@@ -227,7 +227,7 @@ function signIn() {
 		url= 'https://m5.amap.com/ws/alice/activity/daily_sign/do_sign?' + getQuery(node, adiu,channel, key, sign);
 		body = getSigBody(node, channel, adiu, userId, sign, actID, playID, signTerm, signDay);
 		body = getBody(body, key);
-		headers = getHeaders(Cookie, sessionid);
+		headers = getHeaders(sessionid);
 		const rest = {url: url, body: body, headers: headers};
 		$.post(rest, (err, resp, data) => {
 			try {
