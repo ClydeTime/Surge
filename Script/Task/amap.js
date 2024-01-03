@@ -45,7 +45,7 @@ var message='', node='', channel='', adiu='', userId='', actID='', playID='', se
 	intRSA();
 	intCryptoJS();
 
-	message += `②高德地图APP签到=> `;
+	message += `高德地图APP签到=> `;
 	node = 'Amap', channel = 'h5_common', actID = '53m5Q2UjZ6J', playID = '53m5Xt43PGU';
 	await checkIn(); isOk && (await signIn());
 
