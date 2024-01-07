@@ -45,8 +45,16 @@ var message='', node='', channel='', adiu='', userId='', actID='', playID='', se
 	intRSA();
 	intCryptoJS();
 
-	message += `高德地图APP签到=> `;
+	message += `①微信小程序签到=> `;
+	node = 'wechatMP',channel = 'h5_common',actID = '53A31cHhhPJ',playID = '53A3fQm9AM7';
+	await checkIn(); isOk && (await signIn());
+
+	message += `②高德地图APP签到=> `;
 	node = 'Amap', channel = 'h5_common', actID = '53m5Q2UjZ6J', playID = '53m5Xt43PGU';
+	await checkIn(); isOk && (await signIn());
+
+	message += `③支付宝小程序签到=> `;
+	node = 'alipayMini',channel = 'alipay_mini',actID = '53wHnt77TQ5',playID = '53wHtx24q7u';
 	await checkIn(); isOk && (await signIn());
 
 	$.log(message);
