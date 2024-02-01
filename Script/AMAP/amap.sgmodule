@@ -1,6 +1,7 @@
 #!name= 高德地图去广告
 #!desc= 搬运自RuCu6
 #!author= RuCu6
+#!category= MK
 
 [Rule]
 DOMAIN,amap-aos-info-nogw.amap.com,REJECT

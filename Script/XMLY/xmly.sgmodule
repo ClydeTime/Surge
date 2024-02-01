@@ -1,6 +1,7 @@
 #!name= 喜马拉雅破解
 #!desc= 修改会员等级
 #!author= MartinsKing
+#!category= MK
 
 [Rule]
 DOMAIN,gslbali.ximalaya.com,REJECT

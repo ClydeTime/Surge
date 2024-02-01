@@ -2,6 +2,7 @@
 #!desc=腾讯视频：去广告
 #!author = @小白脸
 #!update = 2023-09-17
+#!category= MK
 
 [Rule]
 # > 腾讯视频 去开屏
