@@ -2,7 +2,8 @@ const $ = new Env('建行生活');
 let AppId = '1472477795', giftMap = { "1": "打车", "2": "外卖", "3": "骑行" }, message = '', giftType = '2';
 let autoLoginInfo = $.getdata('JHSH_LOGIN_INFO') || '';  // 刷新 session 所需的数据
 let AppVersion = $.getdata('JHSH_VERSION') || '2.1.5.002';  // 最新版本号，获取失败时使用
-let bodyStr =$.getdata('JHSH_BODY') || '';  // 签到所需的 body
+let bodyStr = $.getdata('JHSH_BODY') || '';  // 签到所需的 body
+let skipDay = $.getdata('JHSH_SKIPDAY') || '';  // 下个断签日 (适用于借记卡用户)
 
 !(async () => {
   if (typeof $request != "undefined") {
@@ -14,6 +15,23 @@ let bodyStr =$.getdata('JHSH_BODY') || '';  // 签到所需的 body
     $.msg($.name, '', '❌ 请先获取建行生活Cookie。');
     return;
   } else {
+		const date = new Date();
+    let day = date.getDay();
+    const weekMap = {
+      0: "星期天",
+      1: "星期一",
+      2: "星期二",
+      3: "星期三",
+      4: "星期四",
+      5: "星期五",
+      6: "星期六",
+    };
+    if (day == skipDay) {
+      let text = `今天是断签日[${weekMap[day]}], 跳过签到任务。`
+      console.log(text);
+      message += text;
+      return;
+    }
 		await getLatestVersion();  // 获取版本信息
 		$.token = '';
     $.info = $.toObj(bodyStr);
@@ -72,20 +90,17 @@ let bodyStr =$.getdata('JHSH_BODY') || '';  // 签到所需的 body
 
 // 获取签到数据
 function GetCookie() {
+	const headers = ObjectKeys2LowerCase($request.headers); // 将 headers 的所有 key 转换为小写以兼容各个代理 App
   if ($request && $request.url.indexOf("A3341A038") > -1) {
     $.body = $.toObj($request.body);
-    if (bodyStr.indexOf($.body?.MEB_ID) == -1) {
-			$.body['MID'] = $request.headers['MID'] || $request.headers['Mid'] || $request.headers['mid'];
-			$.log(`开始新增用户数据 ${$.body}`);
-      $.setdata($.toStr($.body), 'JHSH_BODY');
-    } else {
-      $.log('数据已存在，不再写入。');
-    }
+		$.body['MID'] = headers['mid'];
+		$.body = JSON.stringify($.body);
+		$.log(`开始新增用户数据 ${$.body}`);
+    $.setdata($.body, 'JHSH_BODY');
 		$.msg($.name, ``, `🎉 建行生活签到数据获取成功。`);
   } else if (/autoLogin/.test($request.url)) {
-    $.DeviceId = $request.headers['DeviceId'] || $request.headers['Deviceid'] || $request.headers['deviceid'];
-    $.MBCUserAgent = $request.headers['MBC-User-Agent'] || $request.headers['Mbc-user-agent'] || $request.headers['mbc-user-agent'];
-
+    $.DeviceId = headers['deviceid'];
+    $.MBCUserAgent = headers['mbc-user-agent'];
     if ($.DeviceId && $.MBCUserAgent && $request.body) {
       autoLoginInfo = {
         "DeviceId": $.DeviceId,
@@ -94,7 +109,9 @@ function GetCookie() {
       }
       $.setdata($.toStr(autoLoginInfo), 'JHSH_LOGIN_INFO');
       $.log($.toStr(autoLoginInfo) + "写入成功");
-    }
+    }else {
+			$.log("❌ autoLogin 数据获取失败");
+		}
   }
 }
 
@@ -108,6 +125,7 @@ async function autoLogin() {
       'DeviceId': $.DeviceId,
       'Accept': `application/json`,
       'MBC-User-Agent': $.MBCUserAgent,
+			'Cookie': ''
     },
     body: $.ALBody
   }
@@ -150,7 +168,6 @@ function main() {
       "Content-Type": "application/json;charset=utf-8",
       "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/CloudMercWebView/UnionPay/1.0 CCBLoongPay",
       "Accept": "application/json,text/javascript,*/*",
-      "content-type": "application/json",
 			"Cookie": $.token
     },
     body: `{"ACT_ID":"${$.info.ACT_ID}","REGION_CODE":"${$.info.REGION_CODE}","chnlType":"${$.info.chnlType}","regionCode":"${$.info.regionCode}"}`
@@ -167,6 +184,13 @@ function main() {
             $.log(text);
             message += text;
             if (data?.data?.IS_AWARD == 1) {
+							// 更新自动断签日
+							if (skipDay >= 0) {
+								// 当 day 等于 6 时，下一断签日修正为 0，否则 day + 1
+								day = day == 6 ? 0 : day + 1;
+								$.setdata(String(day), 'JHSH_SKIPDAY');
+								console.log(`♻️ 已更新断签配置：明天(${weekMap[day]})将会断签`);
+							}
               $.GIFT_BAG = data?.data?.GIFT_BAG;
               $.GIFT_BAG.forEach(item => {
                 let body = { "couponId": item.couponId, "nodeDay": item.nodeDay, "couponType": item.couponType, "dccpBscInfSn": item.dccpBscInfSn };
@@ -267,7 +291,7 @@ async function getLatestVersion() {
             $.log(e);
           };
         } else {
-          $.log(`版本🤒匿名用户\n`);
+          $.log(`版本信息获取失败\n`);
         }
       } catch (error) {
         $.log(error);
@@ -277,6 +301,23 @@ async function getLatestVersion() {
     })
   })
 }
+
+  /**
+   * 对象属性转小写
+   * @param {*} obj
+   * @returns
+   */
+  function ObjectKeys2LowerCase(obj) {
+    const _lower = Object.fromEntries(Object.entries(obj).map(([k, v]) => [k.toLowerCase(), v]))
+    return new Proxy(_lower, {
+      get: function (target, propKey, receiver) {
+        return Reflect.get(target, propKey.toLowerCase(), receiver)
+      },
+      set: function (target, propKey, value, receiver) {
+        return Reflect.set(target, propKey.toLowerCase(), value, receiver)
+      }
+    })
+  }
 
 // 数据脱敏
 function hideSensitiveData(string, head_length = 2, foot_length = 2) {
