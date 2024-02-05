@@ -3,7 +3,6 @@ let AppId = '1472477795', giftMap = { "1": "打车", "2": "外卖", "3": "骑行
 let autoLoginInfo = $.getdata('JHSH_LOGIN_INFO') || '';  // 刷新 session 所需的数据
 let AppVersion = $.getdata('JHSH_VERSION') || '2.1.5.002';  // 最新版本号，获取失败时使用
 let bodyStr = $.getdata('JHSH_BODY') || '';  // 签到所需的 body
-let skipDay = $.getdata('JHSH_SKIPDAY') || '';  // 下个断签日 (适用于借记卡用户)
 
 !(async () => {
   if (typeof $request != "undefined") {
@@ -15,23 +14,6 @@ let skipDay = $.getdata('JHSH_SKIPDAY') || '';  // 下个断签日 (适用于借
     $.msg($.name, '', '❌ 请先获取建行生活Cookie。');
     return;
   } else {
-		const date = new Date();
-    let day = date.getDay();
-    const weekMap = {
-      0: "星期天",
-      1: "星期一",
-      2: "星期二",
-      3: "星期三",
-      4: "星期四",
-      5: "星期五",
-      6: "星期六",
-    };
-    if (day == skipDay) {
-      let text = `今天是断签日[${weekMap[day]}], 跳过签到任务。`
-      console.log(text);
-      message += text;
-      return;
-    }
 		await getLatestVersion();  // 获取版本信息
 		$.token = '';
     $.info = $.toObj(bodyStr);
@@ -184,13 +166,6 @@ function main() {
             $.log(text);
             message += text;
             if (data?.data?.IS_AWARD == 1) {
-							// 更新自动断签日
-							if (skipDay >= 0) {
-								// 当 day 等于 6 时，下一断签日修正为 0，否则 day + 1
-								day = day == 6 ? 0 : day + 1;
-								$.setdata(String(day), 'JHSH_SKIPDAY');
-								console.log(`♻️ 已更新断签配置：明天(${weekMap[day]})将会断签`);
-							}
               $.GIFT_BAG = data?.data?.GIFT_BAG;
               $.GIFT_BAG.forEach(item => {
                 let body = { "couponId": item.couponId, "nodeDay": item.nodeDay, "couponType": item.couponType, "dccpBscInfSn": item.dccpBscInfSn };
