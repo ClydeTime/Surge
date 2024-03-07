@@ -1,9 +1,9 @@
 /*
-哔哩哔哩签到脚本
+哔哩哔哩每日任务(V1.0)
 
-更新时间: 2024-01-16
+更新时间: 2024-03-07
 脚本兼容: QuantumultX, Surge, Loon
-脚本作者: MartinsKing
+脚本作者: MartinsKing（@ClydeTime）
 软件功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到/年度大会员每月B币券+等任务
 注意事项:
 	抓取cookie时注意保证账号登录状态;
@@ -12,8 +12,6 @@
 	为保证投币任务成功, 脚本有重试机制(最多重试10次), 以确保任务完成, 前提需要您尽可能多的关注Up主;
 	年度大会员每月B币券会在每月1号、15号尝试领取，确保应用正常运行, 以防漏领;
 	年度大会员自动充电会在每次领劵之后进行, 默认为自己充电, B币多的用户可自行到boxjs设置，以防误充.
-	Loon特别注意:
-		MitM不要勾选MITM over HTTP/2,否则脚本无法正确执行,如必要请获取Cookie成功后再勾选
 使用声明: ⚠️此脚本仅供学习与交流，请勿贩卖！⚠️
 脚本参考: Nobyda、Wyatt1026、ABreadTree、chavyleung、SocialSisterYi
 特别鸣谢: tg用户「🐈🐈‍⬛🐈‍⬛整点猫咪️」提供Surge供测试, 频道链接「https://t.me/GetsomeCats」
@@ -25,7 +23,7 @@ QX, Surge, Loon说明：
 	②通过网址「https://www.bilibili.com」登录
 如通知成功获取cookie, 则可以使用此签到脚本.
 获取Cookie后, 请将Cookie脚本禁用并移除主机名, 以免产生不必要的MITM.
-脚本将在每天上午8点30执行, 您可以修改执行时间, 但是注意不要在凌晨执行, 否则部分任务可能无法完成(非脚本问题, 可能与B站服务器有关)
+脚本将在每天上午7点30执行, 您可以修改执行时间, 但是注意不要在凌晨执行, 否则部分任务可能无法完成(非脚本问题, 可能与B站服务器有关)
 2.投币设置
 定时任务脚本投币规则为: 随机获取关注列表Up主视频, 默认5视频5硬币, 不点赞.
 用户如需要不投币的版本, 请使用boxjs订阅「https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/boxjs/boxjs.json」
@@ -35,7 +33,7 @@ Surge 脚本配置:
 ************************
 
 [Script]
-B站每日等级任务 = type=cron,cronexp=30 8 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/BiliBili.js,wake-system=1,timeout=15,script-update-interval=0
+B站每日等级任务 = type=cron,cronexp=30 7 * * *,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/Task/BiliBili.js,wake-system=1,timeout=15,script-update-interval=0
 
 # BiliBili获取Cookie 「请在模块中添加,成功获取Cookie后模块应去除勾选」
 https://raw.githubusercontent.com/ClydeTime/Surge/main/Task/GetCookie.sgmodule
@@ -46,7 +44,7 @@ QuantumultX 远程脚本配置:
 
 [task_local]
 # B站每日等级任务
-30 8 * * * https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Task/BiliBili.js, tag=B站每日等级任务, img-url=https://raw.githubusercontent.com/HuiDoY/Icon/main/mini/Color/bilibili.png, enabled=true
+30 7 * * * https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Task/BiliBili.js, tag=B站每日等级任务, img-url=https://raw.githubusercontent.com/HuiDoY/Icon/main/mini/Color/bilibili.png, enabled=true
 
 [rewrite_remote]
 # B站获取Cookie 「成功获取Cookie后请去除勾选」
@@ -58,7 +56,7 @@ Loon 远程脚本配置:
 
 [Script]
 # BiliBili每日等级任务
-cron "30 8 * * *" script-path=https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Task/BiliBili.js, tag=BiliBili每日等级任务
+cron "30 7 * * *" script-path=https://raw.githubusercontent.com/ClydeTime/Quantumult/main/Script/Task/BiliBili.js, tag=BiliBili每日等级任务
 
 [Plugin]
 # BiliBili获取Cookie 「成功获取Cookie后请禁用插件」
@@ -813,18 +811,23 @@ async function vipScoreSign() {
 function vipExtraEx() {
 	return new Promise((resolve, reject) => {
 		$.log("#### 大会员每日额外经验值")
-		const body = {
+		var body = {
 			csrf: config.cookie.bili_jct,
+			ts: parseInt($.startTime / 1000),
+			buvid: config.cookie.Buvid,
 			mobi_app: 'iphone',
 			platform:'ios',
 			appkey:'27eb53fc9058f8c3',
 			access_key:`${config.key}`
 		}
+		var sortedBody = $.queryStr(Object.fromEntries(new Map(Array.from(Object.entries(test)).sort())))
+		var sign = md5(sortedBody + 'c2ed53a74eeefe3cf99fbd01d8c9c375')
+		body['sign'] = sign
 		const myRequest = {
 			url: "https://api.bilibili.com/x/vip/experience/add",
 			headers: {
-				'Accept:' : `application/json, text/plain, */*`,
-				'App-key': 'iphone'
+				'accept:' : 'application/json, text/plain, */*',
+				'app-key': 'iphone'
 			},
 			body: $.queryStr(body)
 		}
