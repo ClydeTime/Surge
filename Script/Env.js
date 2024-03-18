@@ -1,566 +1,537 @@
 function Env(name, opts) {
-  class Http {
-    constructor(env) {
-      this.env = env
-    }
+	return new (class {
+		constructor(name, opts) {
+			this.name = name
+			this.version = '1.7.4'
+			this.data = null
+			this.logs = []
+			this.isMute = false
+			this.isNeedRewrite = false
+			this.logSeparator = '\n'
+			this.encoding = 'utf-8'
+			this.startTime = new Date().getTime()
+			Object.assign(this, opts)
+			this.log('', `🔔${this.name}, 开始!`)
+		}
 
-    send(opts, method = 'GET') {
-      opts = typeof opts === 'string' ? { url: opts } : opts
-      let sender = this.get
-      if (method === 'POST') {
-        sender = this.post
-      }
-      return new Promise((resolve, reject) => {
-        sender.call(this, opts, (err, resp, body) => {
-          if (err) reject(err)
-          else resolve(resp)
-        })
-      })
-    }
+		platform() {
+			if ('undefined' !== typeof $environment && $environment['surge-version'])
+				return 'Surge'
+			if ('undefined' !== typeof $environment && $environment['stash-version'])
+				return 'Stash'
+			if ('undefined' !== typeof module && !!module.exports) return 'Node.js'
+			if ('undefined' !== typeof $task) return 'Quantumult X'
+			if ('undefined' !== typeof $loon) return 'Loon'
+			if ('undefined' !== typeof $rocket) return 'Shadowrocket'
+			if ('undefined' !== typeof Egern) return 'Egern'
+		}
 
-    get(opts) {
-      return this.send.call(this.env, opts)
-    }
+		isQuanX() {
+			return 'Quantumult X' === this.platform()
+		}
 
-    post(opts) {
-      return this.send.call(this.env, opts, 'POST')
-    }
-  }
+		isSurge() {
+			return 'Surge' === this.platform()
+		}
 
-  return new (class {
-    constructor(name, opts) {
-      this.name = name
-      this.http = new Http(this)
-      this.data = null
-      this.dataFile = 'box.dat'
-      this.logs = []
-      this.isMute = false
-      this.isNeedRewrite = false
-      this.logSeparator = '\n'
-      this.encoding = 'utf-8'
-      this.startTime = new Date().getTime()
-      Object.assign(this, opts)
-      this.log('', `🔔${this.name}, 开始!`)
-    }
+		isLoon() {
+			return 'Loon' === this.platform()
+		}
 
-    getEnv() {
-      if ('undefined' !== typeof $environment && $environment['surge-version'])
-        return 'Surge'
-      if ('undefined' !== typeof $environment && $environment['stash-version'])
-        return 'Stash'
-      if ('undefined' !== typeof $task) return 'Quantumult X'
-      if ('undefined' !== typeof $loon) return 'Loon'
-      if ('undefined' !== typeof $rocket) return 'Shadowrocket'
-    }
+		isShadowrocket() {
+			return 'Shadowrocket' === this.platform()
+		}
 
-    isQuanX() {
-      return 'Quantumult X' === this.getEnv()
-    }
+		isStash() {
+			return 'Stash' === this.platform()
+		}
 
-    isSurge() {
-      return 'Surge' === this.getEnv()
-    }
+		isEgern() {
+			return 'Egern' === this.platform()
+		}
 
-    isLoon() {
-      return 'Loon' === this.getEnv()
-    }
+		toObj(str, defaultValue = null) {
+			try {
+				return JSON.parse(str)
+			} catch {
+				return defaultValue
+			}
+		}
 
-    isShadowrocket() {
-      return 'Shadowrocket' === this.getEnv()
-    }
+		toStr(obj, defaultValue = null) {
+			try {
+				return JSON.stringify(obj)
+			} catch {
+				return defaultValue
+			}
+		}
 
-    isStash() {
-      return 'Stash' === this.getEnv()
-    }
+		lodash_get(object = {}, path = "", defaultValue = undefined) {
+			// translate array case to dot case, then split with .
+			// a[0].b -> a.0.b -> ['a', '0', 'b']
+			if (!Array.isArray(path)) path = this.toPath(path)
+			const result = path.reduce((previousValue, currentValue) => {
+				return Object(previousValue)[currentValue] // null undefined get attribute will throwError, Object() can return a object 
+			}, object)
+			return (result === undefined) ? defaultValue : result
+		}
 
-    toObj(str, defaultValue = null) {
-      try {
-        return JSON.parse(str)
-      } catch {
-        return defaultValue
-      }
-    }
+		lodash_set(object = {}, path = "", value) {
+			if (!Array.isArray(path)) path = this.toPath(path)
+			path
+				.slice(0, -1)
+				.reduce(
+					(previousValue, currentValue, currentIndex) =>
+						(Object(previousValue[currentValue]) === previousValue[currentValue])
+							? previousValue[currentValue]
+							: previousValue[currentValue] = (/^\d+$/.test(path[currentIndex + 1]) ? [] : {}),
+					object
+				)[path[path.length - 1]] = value
+			return object
+		}
 
-    toStr(obj, defaultValue = null) {
-      try {
-        return JSON.stringify(obj)
-      } catch {
-        return defaultValue
-      }
-    }
+		toPath(value) {
+			return value.replace(/\[(\d+)\]/g, '.$1').split('.').filter(Boolean)
+		}
 
-    getjson(key, defaultValue) {
-      let json = defaultValue
-      const val = this.getdata(key)
-      if (val) {
-        try {
-          json = JSON.parse(this.getdata(key))
-        } catch {}
-      }
-      return json
-    }
+		getItem(keyName = new String, defaultValue = null) {
+			let keyValue = defaultValue
+			// 如果以 @
+			switch (keyName.startsWith('@')) {
+				case true:
+					const { key, path } = keyName.match(/^@(?<key>[^.]+)(?:\.(?<path>.*))?$/)?.groups
+					keyName = key
+					let value = this.getItem(keyName, {})
+					if (typeof value !== "object") value = {}
+					keyValue = this.lodash_get(value, path)
+					try {
+						keyValue = JSON.parse(keyValue)
+					} catch (e) {
+						// do nothing
+					}
+					break
+				default:
+					switch (this.platform()) {
+						case 'Surge':
+						case 'Loon':
+						case 'Stash':
+						case 'Egern':
+						case 'Shadowrocket':
+							keyValue = $persistentStore.read(keyName)
+							break
+						case 'Quantumult X':
+							keyValue = $prefs.valueForKey(keyName)
+							break
+						default:
+							keyValue = this.data?.[keyName] || null
+							break
+					}
+					try {
+						keyValue = JSON.parse(keyValue)
+					} catch (e) {
+						// do nothing
+					}
+					break
+			}
+		return keyValue ?? defaultValue
+		}
 
-    setjson(val, key) {
-      try {
-        return this.setdata(JSON.stringify(val), key)
-      } catch {
-        return false
-      }
-    }
+		setItem(keyName = new String, keyValue = new String) {
+			let result = false
+			switch (typeof keyValue) {
+				case "object":
+					keyValue = JSON.stringify(keyValue)
+					break
+				default:
+					keyValue = String(keyValue)
+					break
+			}
+			switch (keyName.startsWith('@')) {
+				case true:
+					const { key, path } = keyName.match(/^@(?<key>[^.]+)(?:\.(?<path>.*))?$/)?.groups
+					keyName = key
+					let value = this.getItem(keyName, {})
+					if (typeof value !== "object") value = {}
+					this.lodash_set(value, path, keyValue)
+					result = this.setItem(keyName, value)
+					break
+				default:
+					switch (this.platform()) {
+						case 'Surge':
+						case 'Loon':
+						case 'Stash':
+						case 'Egern':
+						case 'Shadowrocket':
+							result = $persistentStore.write(keyValue, keyName)
+							break
+						case 'Quantumult X':
+							result =$prefs.setValueForKey(keyValue, keyName)
+							break
+						default:
+							result = this.data?.[keyName] || null
+							break
+					}
+					break
+			}
+			return result
+		}
 
-    lodash_get(source, path, defaultValue = undefined) {
-      const paths = path.replace(/\[(\d+)\]/g, '.$1').split('.')
-      let result = source
-      for (const p of paths) {
-        result = Object(result)[p]
-        if (result === undefined) {
-          return defaultValue
-        }
-      }
-      return result
-    }
+		async fetch(request = {} || "", option = {}) {
+			// 初始化参数
+			switch (request.constructor) {
+				case Object:
+					request = { ...request, ...option }
+					break
+				case String:
+					request = { "url": request, ...option }
+					break
+			}
+			// 自动判断请求方法
+			if (!request.method) {
+				request.method = request.body ?? request.bodyBytes ? "POST" : "GET"
+			}
+			// 移除请求头中的部分参数, 让其自动生成
+			delete request.headers?.Host
+			delete request.headers?.[":authority"]
+			delete request.headers?.['Content-Length']
+			delete request.headers?.['content-length']
+			// 定义请求方法（小写）
+			const method = request.method.toLocaleLowerCase()
+			// 判断平台
+			switch (this.platform()) {
+				case 'Loon':
+				case 'Surge':
+				case 'Stash':
+				case 'Egern':
+				case 'Shadowrocket':
+				default:
+					// 转换请求参数
+					if (request.policy) {
+						if (this.isLoon()) request.node = request.policy
+						if (this.isStash()) this.lodash_set(request, "headers.X-Stash-Selected-Proxy", encodeURI(request.policy))
+					}
+					// 禁止重定向
+					if (request.followRedirect) {
+						if (this.isSurge() || this.isLoon()) request['auto-redirect'] = false
+						if (this.isQuanX()) request.opts ? request.opts.redirection = false : request.opts = { redirection: false }
+					}
+					// 转换请求体
+					if (request.bodyBytes && !request.body) {
+						request.body = request.bodyBytes
+						delete request.bodyBytes
+					}
+					// 发送请求
+					return await new Promise((resolve, reject) => {
+						$httpClient[method](request, (error, response, body) => {
+							if (error) reject(error)
+							else {
+								response.ok = /^2\d\d$/.test(response.status)
+								response.statusCode = response.status
+								if (body) {
+									response.body = body
+									if (request["binary-mode"] == true) response.bodyBytes = body
+								}
+								resolve(response)
+							}
+						})
+					})
+				case 'Quantumult X':
+					// 转换请求参数
+					if (request.policy) this.lodash_set(request, "opts.policy", request.policy)
+					if (typeof request["auto-redirect"] === "boolean") this.lodash_set(request, "opts.redirection", request["auto-redirect"])
+					// 转换请求体
+					if (request.body instanceof ArrayBuffer) {
+						request.bodyBytes = request.body
+						delete request.body
+					} else if (ArrayBuffer.isView(request.body)) {
+						request.bodyBytes = request.body.buffer.slice(request.body.byteOffset, request.body.byteLength + request.body.byteOffset)
+						delete object.body
+					} else if (request.body) delete request.bodyBytes
+					// 发送请求
+					return await $task.fetch(request).then(
+						response => {
+							response.ok = /^2\d\d$/.test(response.statusCode)
+							response.status = response.statusCode
+							return response
+						},
+						reason => Promise.reject(reason.error))
+			}
+		}
 
-    lodash_set(obj, path, value) {
-      if (Object(obj) !== obj) return obj
-      if (!Array.isArray(path)) path = path.toString().match(/[^.[\]]+/g) || []
-      path
-        .slice(0, -1)
-        .reduce(
-          (a, c, i) =>
-            Object(a[c]) === a[c]
-              ? a[c]
-              : (a[c] = Math.abs(path[i + 1]) >> 0 === +path[i + 1] ? [] : {}),
-          obj
-        )[path[path.length - 1]] = value
-      return obj
-    }
+		/**
+		 *
+		 * 示例:$.time('yyyy-MM-dd qq HH:mm:ss.S')
+		 *    :$.time('yyyyMMddHHmmssS')
+		 *    y:年 M:月 d:日 q:季 H:时 m:分 s:秒 S:毫秒
+		 *    其中y可选0-4位占位符、S可选0-1位占位符，其余可选0-2位占位符
+		 * @param {string} fmt 格式化参数
+		 * @param {number} 可选: 根据指定时间戳返回格式化日期
+		 *
+		 */
+		time(fmt, ts = null) {
+			const date = ts ? new Date(ts) : new Date()
+			let o = {
+				'M+': date.getMonth() + 1,
+				'd+': date.getDate(),
+				'H+': date.getHours(),
+				'm+': date.getMinutes(),
+				's+': date.getSeconds(),
+				'q+': Math.floor((date.getMonth() + 3) / 3),
+				'S': date.getMilliseconds()
+			}
+			if (/(y+)/.test(fmt))
+				fmt = fmt.replace(
+					RegExp.$1,
+					(date.getFullYear() + '').slice(4 - RegExp.$1.length)
+				)
+			for (let k in o)
+				if (new RegExp('(' + k + ')').test(fmt))
+					fmt = fmt.replace(
+						RegExp.$1,
+						RegExp.$1.length == 1
+							? o[k]
+							: ('00' + o[k]).slice(('' + o[k]).length)
+					)
+			return fmt
+		}
 
-    getdata(key) {
-      let val = this.getval(key)
-      // 如果以 @
-      if (/^@/.test(key)) {
-        const [, objkey, paths] = /^@(.*?)\.(.*?)$/.exec(key)
-        const objval = objkey ? this.getval(objkey) : ''
-        if (objval) {
-          try {
-            const objedval = JSON.parse(objval)
-            val = objedval ? this.lodash_get(objedval, paths, '') : val
-          } catch (e) {
-            val = ''
-          }
-        }
-      }
-      return val
-    }
+		/**
+		 *
+		 * @param {String} url
+		 * @returns {url} 将 'http://url.com/page?name=Adam&surname=Smith' 替换为 'http://url.com/page'
+		 */
+		getBaseURL(url) {
+			return url.replace(/[?#].*$/, '')
+		}
 
-    setdata(val, key) {
-      let issuc = false
-      if (/^@/.test(key)) {
-        const [, objkey, paths] = /^@(.*?)\.(.*?)$/.exec(key)
-        const objdat = this.getval(objkey)
-        const objval = objkey
-          ? objdat === 'null'
-            ? null
-            : objdat || '{}'
-          : '{}'
-        try {
-          const objedval = JSON.parse(objval)
-          this.lodash_set(objedval, paths, val)
-          issuc = this.setval(JSON.stringify(objedval), objkey)
-        } catch (e) {
-          const objedval = {}
-          this.lodash_set(objedval, paths, val)
-          issuc = this.setval(JSON.stringify(objedval), objkey)
-        }
-      } else {
-        issuc = this.setval(val, key)
-      }
-      return issuc
-    }
+		/**
+		 *
+		 * @param {String} url
+		 * @returns {url} 判断URL是否为绝对路径 eg. isAbsoluteURL('/foo/bar') // false
+		 */
+		isAbsoluteURL(str) {
+			return /^[a-z][a-z0-9+.-]*:/.test(str)
+		}
 
-    getval(key) {
-      switch (this.getEnv()) {
-        case 'Surge':
-        case 'Loon':
-        case 'Stash':
-        case 'Shadowrocket':
-          return $persistentStore.read(key)
-        case 'Quantumult X':
-          return $prefs.valueForKey(key)
-        default:
-          return (this.data && this.data[key]) || null
-      }
-    }
+		/**
+		 *
+		 * @param {String} url
+		 * @returns {url} 将 URL 参数转换为对象 eg. getURLParameters('http://url.com/page?name=Adam&surname=Smith') // {name: 'Adam', surname: 'Smith'}
+		 */
+		getURLParameters(url) {
+			return (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
+				(a, v) => (
+					(a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a
+				),
+				{}
+			)
+		}
 
-    setval(val, key) {
-      switch (this.getEnv()) {
-        case 'Surge':
-        case 'Loon':
-        case 'Stash':
-        case 'Shadowrocket':
-          return $persistentStore.write(val, key)
-        case 'Quantumult X':
-          return $prefs.setValueForKey(val, key)
-        default:
-          return (this.data && this.data[key]) || null
-      }
-    }
+		/**
+		 *
+		 * @param {Date} date
+		 * @returns {url} 从日期生成 UNIX 时间戳
+		 */
+		getTimestamp(date = new Date()) {
+			return Math.floor(date.getTime() / 1000)
+		}
 
-    get(request, callback = () => {}) {
-      if (request.headers) {
-        delete request.headers['Content-Type']
-        delete request.headers['Content-Length']
-
-        // HTTP/2 全是小写
-        delete request.headers['content-type']
-        delete request.headers['content-length']
-      }
-      switch (this.getEnv()) {
-        case 'Surge':
-        case 'Loon':
-        case 'Stash':
-        case 'Shadowrocket':
-        default:
-          if (this.isSurge() && this.isNeedRewrite) {
-            request.headers = request.headers || {}
-            Object.assign(request.headers, { 'X-Surge-Skip-Scripting': false })
-          }
-          $httpClient.get(request, (err, resp, body) => {
-            if (!err && resp) {
-              resp.body = body
-              resp.statusCode = resp.status ? resp.status : resp.statusCode
-              resp.status = resp.statusCode
-            }
-            callback(err, resp, body)
-          })
-          break
-        case 'Quantumult X':
-          if (this.isNeedRewrite) {
-            request.opts = request.opts || {}
-            Object.assign(request.opts, { hints: false })
-          }
-          $task.fetch(request).then(
-            (resp) => {
-              const {
-                statusCode: status,
-                statusCode,
-                headers,
-                body,
-                bodyBytes
-              } = resp
-              callback(
-                null,
-                { status, statusCode, headers, body, bodyBytes },
-                body,
-                bodyBytes
-              )
-            },
-            (err) => callback((err && err.error) || 'UndefinedError')
-          )
-          break
-      }
-    }
-
-    post(request, callback = () => {}) {
-      const method = request.method
-        ? request.method.toLocaleLowerCase()
-        : 'post'
-
-      // 如果指定了请求体, 但没指定 `Content-Type`、`content-type`, 则自动生成。
-      if (
-        request.body &&
-        request.headers &&
-        !request.headers['Content-Type'] &&
-        !request.headers['content-type']
-      ) {
-        // HTTP/1、HTTP/2 都支持小写 headers
-        request.headers['content-type'] = 'application/x-www-form-urlencoded'
-      }
-      // 为避免指定错误 `content-length` 这里删除该属性，由工具端 (HttpClient) 负责重新计算并赋值
-      if (request.headers) {
-        delete request.headers['Content-Length']
-        delete request.headers['content-length']
-      }
-      switch (this.getEnv()) {
-        case 'Surge':
-        case 'Loon':
-        case 'Stash':
-        case 'Shadowrocket':
-        default:
-          if (this.isSurge() && this.isNeedRewrite) {
-            request.headers = request.headers || {}
-            Object.assign(request.headers, { 'X-Surge-Skip-Scripting': false })
-          }
-          $httpClient[method](request, (err, resp, body) => {
-            if (!err && resp) {
-              resp.body = body
-              resp.statusCode = resp.status ? resp.status : resp.statusCode
-              resp.status = resp.statusCode
-            }
-            callback(err, resp, body)
-          })
-          break
-        case 'Quantumult X':
-          request.method = method
-          if (this.isNeedRewrite) {
-            request.opts = request.opts || {}
-            Object.assign(request.opts, { hints: false })
-          }
-          $task.fetch(request).then(
-            (resp) => {
-              const {
-                statusCode: status,
-                statusCode,
-                headers,
-                body,
-                bodyBytes
-              } = resp
-              callback(
-                null,
-                { status, statusCode, headers, body, bodyBytes },
-                body,
-                bodyBytes
-              )
-            },
-            (err) => callback((err && err.error) || 'UndefinedError')
-          )
-          break
-      }
-    }
-    /**
-     *
-     * 示例:$.time('yyyy-MM-dd qq HH:mm:ss.S')
-     *    :$.time('yyyyMMddHHmmssS')
-     *    y:年 M:月 d:日 q:季 H:时 m:分 s:秒 S:毫秒
-     *    其中y可选0-4位占位符、S可选0-1位占位符，其余可选0-2位占位符
-     * @param {string} fmt 格式化参数
-     * @param {number} 可选: 根据指定时间戳返回格式化日期
-     *
-     */
-    time(fmt, ts = null) {
-      const date = ts ? new Date(ts) : new Date()
-      let o = {
-        'M+': date.getMonth() + 1,
-        'd+': date.getDate(),
-        'H+': date.getHours(),
-        'm+': date.getMinutes(),
-        's+': date.getSeconds(),
-        'q+': Math.floor((date.getMonth() + 3) / 3),
-        'S': date.getMilliseconds()
-      }
-      if (/(y+)/.test(fmt))
-        fmt = fmt.replace(
-          RegExp.$1,
-          (date.getFullYear() + '').slice(4 - RegExp.$1.length)
-        )
-      for (let k in o)
-        if (new RegExp('(' + k + ')').test(fmt))
-          fmt = fmt.replace(
-            RegExp.$1,
-            RegExp.$1.length == 1
-              ? o[k]
-              : ('00' + o[k]).slice(('' + o[k]).length)
-          )
-      return fmt
-    }
-
-    /**
-     *
-     * @param {String} url
-     * @returns {url} 将 'http://url.com/page?name=Adam&surname=Smith' 替换为 'http://url.com/page'
-     */
-    getBaseURL(url) {
-      return url.replace(/[?#].*$/, '')
-    }
-
-    /**
-     *
-     * @param {String} url
-     * @returns {url} 判断URL是否为绝对路径 eg. isAbsoluteURL('/foo/bar') // false
-     */
-    isAbsoluteURL(str) {
-      return /^[a-z][a-z0-9+.-]*:/.test(str)
-    }
-
-    /**
-     *
-     * @param {String} url
-     * @returns {url} 将 URL 参数转换为对象 eg. getURLParameters('http://url.com/page?name=Adam&surname=Smith') // {name: 'Adam', surname: 'Smith'}
-     */
-    getURLParameters(url) {
-      return (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
-        (a, v) => (
-          (a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a
-        ),
-        {}
-      )
-    }
-
-    /**
-     *
-     * @param {Date} date
-     * @returns {url} 从日期生成 UNIX 时间戳
-     */
-    getTimestamp(date = new Date()) {
-      Math.floor(date.getTime() / 1000)
-    }
-
-    /**
-     *
-     * @param {Object} options
-     * @returns {String} 将 Object 对象 转换成 queryStr: key=val&name=senku
-     */
-    queryStr(options) {
-			let params = [];
+		/**
+		 *
+		 * @param {Object} options
+		 * @returns {String} 将 Object 对象 转换成 queryStr: key=val&name=senku
+		 */
+		queryStr(options) {
+			let params = []
 			for (let key in options) {
 				if (options.hasOwnProperty(key)) {
-					params.push(`${key}=${encodeURIComponent(options[key])}`);
+					params.push(`${key}=${options[key]}`)
 				}
 			}
-			let queryString = params.join('&');
-			return queryString;
+			let queryString = params.join('&')
+			return queryString
 		}
 
-    /**
-     *
-     * @param {String} options
-     * @returns {Object} 将 queryStr: key=val&name=senku 字符串 转换成 Object
-     */
-    queryObj(options) {
-			let obj = {};
-			let pairs = options.split('&');
+		/**
+		 *
+		 * @param {String} options
+		 * @returns {Object} 将 queryStr: key=val&name=senku 字符串 转换成 Object
+		 */
+		queryObj(options) {
+			let obj = {}
+			let pairs = options.split('&')
 			for (let pair of pairs) {
-				let keyValue = pair.split('=');
-				let key = keyValue[0];
-				let value = decodeURIComponent(keyValue[1] || '');
+				let keyValue = pair.split('=')
+				let key = keyValue[0]
+				let value = keyValue[1] || ''
 				if (key) {
-					obj[key] = value;
+					obj[key] = value
 				}
 			}
-			return obj;
+			return obj
 		}
 
-    /**
-     * 系统通知
-     *
-     * > 通知参数: 同时支持 QuanX 和 Loon 两种格式, EnvJs根据运行环境自动转换, Surge 环境不支持多媒体通知
-     *
-     * 示例:
-     * $.msg(title, subt, desc, 'twitter://')
-     * $.msg(title, subt, desc, { 'open-url': 'twitter://', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
-     * $.msg(title, subt, desc, { 'open-url': 'https://bing.com', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
-     *
-     * @param {*} title 标题
-     * @param {*} subt 副标题
-     * @param {*} desc 通知详情
-     * @param {*} opts 通知参数
-     *
-     */
-    msg(title = name, subt = '', desc = '', opts) {
-      const toEnvOpts = (rawopts) => {
-        switch (typeof rawopts) {
-          case undefined:
-            return rawopts
-          case 'string':
-            switch (this.getEnv()) {
-              case 'Surge':
-              case 'Stash':
-              default:
-                return { url: rawopts }
-              case 'Loon':
-              case 'Shadowrocket':
-                return rawopts
-              case 'Quantumult X':
-                return { 'open-url': rawopts }
-            }
-          case 'object':
-            switch (this.getEnv()) {
-              case 'Surge':
-              case 'Stash':
-              case 'Shadowrocket':
-              default: {
-                let openUrl =
-                  rawopts.url || rawopts.openUrl || rawopts['open-url']
-                return { url: openUrl }
-              }
-              case 'Loon': {
-                let openUrl =
-                  rawopts.openUrl || rawopts.url || rawopts['open-url']
-                let mediaUrl = rawopts.mediaUrl || rawopts['media-url']
-                return { openUrl, mediaUrl }
-              }
-              case 'Quantumult X': {
-                let openUrl =
-                  rawopts['open-url'] || rawopts.url || rawopts.openUrl
-                let mediaUrl = rawopts['media-url'] || rawopts.mediaUrl
-                let updatePasteboard =
-                  rawopts['update-pasteboard'] || rawopts.updatePasteboard
-                return {
-                  'open-url': openUrl,
-                  'media-url': mediaUrl,
-                  'update-pasteboard': updatePasteboard
-                }
-              }
-            }
-          default:
-            return undefined
-        }
-      }
-      if (!this.isMute) {
-        switch (this.getEnv()) {
-          case 'Surge':
-          case 'Loon':
-          case 'Stash':
-          case 'Shadowrocket':
-          default:
-            $notification.post(title, subt, desc, toEnvOpts(opts))
-            break
-          case 'Quantumult X':
-            $notify(title, subt, desc, toEnvOpts(opts))
-            break
-        }
-      }
-    }
+		/**
+		 * 系统通知
+		 *
+		 * > 通知参数: 同时支持 QuanX 和 Loon 两种格式, EnvJs根据运行环境自动转换, Surge 环境不支持多媒体通知
+		 *
+		 * 示例:
+		 * $.msg(title, subt, desc, 'twitter://')
+		 * $.msg(title, subt, desc, { 'open-url': 'twitter://', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
+		 * $.msg(title, subt, desc, { 'open-url': 'https://bing.com', 'media-url': 'https://github.githubassets.com/images/modules/open_graph/github-mark.png' })
+		 *
+		 * @param {*} title 标题
+		 * @param {*} subt 副标题
+		 * @param {*} desc 通知详情
+		 * @param {*} opts 通知参数
+		 *
+		 */
+		msg(title = this.name, subt = '', desc = '', opts) {
+			const toEnvOpts = rawopts => {
+				switch (typeof rawopts) {
+					case undefined:
+						return rawopts
+					case 'string':
+						switch (this.platform()) {
+							case 'Surge':
+							case 'Stash':
+							case 'Egern':
+							default:
+								return { url: rawopts }
+							case 'Loon':
+							case 'Shadowrocket':
+								return rawopts
+							case 'Quantumult X':
+								return { 'open-url': rawopts }
+						}
+					case 'object':
+						switch (this.platform()) {
+							case 'Surge':
+							case 'Stash':
+							case 'Egern':
+							case 'Shadowrocket':
+							default: {
+								let openUrl =
+									rawopts.url || rawopts.openUrl || rawopts['open-url']
+								return { url: openUrl }
+							}
+							case 'Loon': {
+								let openUrl =
+									rawopts.openUrl || rawopts.url || rawopts['open-url']
+								let mediaUrl = rawopts.mediaUrl || rawopts['media-url']
+								return { openUrl, mediaUrl }
+							}
+							case 'Quantumult X': {
+								let openUrl =
+									rawopts['open-url'] || rawopts.url || rawopts.openUrl
+								let mediaUrl = rawopts['media-url'] || rawopts.mediaUrl
+								let updatePasteboard =
+									rawopts['update-pasteboard'] || rawopts.updatePasteboard
+								return {
+									'open-url': openUrl,
+									'media-url': mediaUrl,
+									'update-pasteboard': updatePasteboard
+								}
+							}
+						}
+					default:
+						return undefined
+				}
+			}
+			if (!this.isMute) {
+				switch (this.platform()) {
+					case 'Surge':
+					case 'Loon':
+					case 'Stash':
+					case 'Shadowrocket':
+					default:
+						$notification.post(title, subt, desc, toEnvOpts(opts))
+						break
+					case 'Quantumult X':
+						$notify(title, subt, desc, toEnvOpts(opts))
+						break
+				}
+			}
+		}
 
-    log(...logs) {
-      if (logs.length > 0) {
-        this.logs = [...this.logs, ...logs]
-      }
-      console.log(logs.join(this.logSeparator))
-    }
+		log(...logs) {
+			if (logs.length > 0) {
+				this.logs = [...this.logs, ...logs]
+			}
+			console.log(logs.join(this.logSeparator))
+		}
 
-    logErr(err, msg) {
-      switch (this.getEnv()) {
-        case 'Surge':
-        case 'Loon':
-        case 'Stash':
-        case 'Shadowrocket':
-        case 'Quantumult X':
-        default:
-          this.log('', `❗️${this.name}, 错误!`, err, msg)
-          break
-      }
-    }
+		logErr(err, msg) {
+			switch (this.platform()) {
+				case 'Surge':
+				case 'Loon':
+				case 'Stash':
+				case 'Egern':
+				case 'Shadowrocket':
+				case 'Quantumult X':
+				default:
+					this.log('', `❗️${this.name}, 错误!`, err, msg)
+					break
+			}
+		}
 
-    wait(time) {
-      return new Promise((resolve) => setTimeout(resolve, time))
-    }
+		wait(time) {
+			return new Promise((resolve) => setTimeout(resolve, time))
+		}
 
-    done(val = {}) {
-      const endTime = new Date().getTime()
-      const costTime = (endTime - this.startTime) / 1000
-      this.log('', `🔔${this.name}, 结束! 🕛 ${costTime} 秒`)
-      this.log()
-      switch (this.getEnv()) {
-        case 'Surge':
-        case 'Loon':
-        case 'Stash':
-        case 'Shadowrocket':
-        case 'Quantumult X':
-        default:
-          $done(val)
-          break
-      }
-    }
-  })(name, opts)
+		done(object = {}) {
+			const endTime = new Date().getTime()
+			const costTime = (endTime - this.startTime) / 1000
+			this.log('', `🔔${this.name}, 结束! 🕛 ${costTime} 秒`)
+			switch (this.platform()) {
+				case 'Surge':
+					if (object.policy) this.lodash_set(object, "headers.X-Surge-Policy", object.policy)
+					$done(object)
+					break
+				case 'Loon':
+					if (object.policy) object.node = object.policy
+					$done(object)
+					break
+				case 'Stash':
+					if (object.policy) this.lodash_set(object, "headers.X-Stash-Selected-Proxy", encodeURI(object.policy))
+					$done(object)
+					break
+				case 'Egern':
+					$done(object)
+					break
+				case 'Shadowrocket':
+				default:
+					$done(object)
+					break
+				case 'Quantumult X':
+					if (object.policy) this.lodash_set(object, "opts.policy", object.policy)
+					// 移除不可写字段
+					delete object["auto-redirect"]
+					delete object["auto-cookie"]
+					delete object["binary-mode"]
+					delete object.charset
+					delete object.host
+					delete object.insecure
+					delete object.method // 1.4.x 不可写
+					delete object.opt // $task.fetch() 参数, 不可写
+					delete object.path // 可写, 但会与 url 冲突
+					delete object.policy
+					delete object["policy-descriptor"]
+					delete object.scheme
+					delete object.sessionIndex
+					delete object.statusCode
+					delete object.timeout
+					if (object.body instanceof ArrayBuffer) {
+						object.bodyBytes = object.body
+						delete object.body
+					} else if (ArrayBuffer.isView(object.body)) {
+						object.bodyBytes = object.body.buffer.slice(object.body.byteOffset, object.body.byteLength + object.body.byteOffset)
+						delete object.body
+					} else if (object.body) delete object.bodyBytes
+					$done(object)
+					break
+			}
+		}
+	})(name, opts)
 }
