@@ -37,10 +37,6 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 ^https?:\/\/(adse\.wsa|adse|adbehavior)\.ximalaya\.com\/.* - reject
 #屏蔽位置请求
 ^https?:\/\/.*\.ximalaya\.com\/mobile\/discovery\/v\d\/location - reject
-#屏蔽热搜词
-#^https?:\/\/.*\.ximalaya\.com\/(hub\/)?hotWord - reject
-#屏蔽搜索框定时_Ad
-#^https?:\/\/search(wsa)?\.ximalaya\.com\/(hub\/)?guideWord - reject
 #屏蔽实时Ad请求
 ^https?:\/\/.*\.ximalaya\.com\/api\/v\d\/adRealTime - reject
 #屏蔽ting_Ad
@@ -56,6 +52,8 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 
 我的页会员去Ad = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/mobile-user\/v\d\/homePage,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
+我的页浏览历史 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/browsing-history-business\/browsing\/history\/query,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
 音频去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/mobile-playpage\/track\/v\d\/baseInfo,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 音频去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/mobile\/playlist\/album\/new,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
@@ -63,6 +61,8 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 播放页去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/mobile-playpage\/playpage\/tabs\/v\d,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 播放页去标签广告 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/mobile-playpage\/playpage\/recommend\/resource\/allocation,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
+播放页推荐去广告 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/mobile-playpage\/playpage\/recommendContentV\d,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 专辑付费信息 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/mobile\/album\/paid\/info,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
@@ -72,7 +72,7 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 
 专辑详情页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/product\/detail\/v\d\/basicInfo\/dynamic,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
-上次播放记录去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/nyx\/history\/query\/detail,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+记录去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/nyx\/history\/query\/(detail|id\/list),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 导航会员页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/vip\/v\d\/recommand,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
@@ -82,8 +82,9 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 
 暂未知 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/vip\/feed\/v1\/mix,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
+搜索推荐 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/search(wsa)?\.ximalaya\.com\/(hub\/)?(guideWordV\d|hotWord(V\d|Billboard\/card)),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
 轮盘广告 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/focus-mobile\/focusPic\/info,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
-
 [MITM]
-hostname = %APPEND% *.ximalaya.com, 61.164.145.12, 61.172.194.185, 61.172.194.186, 106.41.204.126, 112.98.170.228, 112.99.146.108, 114.80.99.*, 180.153.140.*, 180.153.250.*, 180.153.255.*
+hostname = %APPEND% *.ximalaya.com, 47.100.227.85, 61.164.145.12, 61.172.194.185, 61.172.194.186, 106.41.204.126, 112.80.180.72, 112.98.170.228, 112.99.146.108, 114.80.99.*, 118.25.119.177, 180.153.140.*, 180.153.250.*, 180.153.255.* 

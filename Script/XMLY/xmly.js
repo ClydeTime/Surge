@@ -4,21 +4,29 @@ let path = PATH.replace(/(\/|\/ts-)\d+(\.\d+)?/g, '');
 let body = JSON.parse($response.body);
 switch (path) {
 	case "/mobile-user/v2/homePage": //我的页面
+		const entranceId = [210, 213, 215];
 		body.data.anchorVipInfo.isVip = true;
-		body.data.vipInfo.status = 5;
-		body.data.vipInfo.level = 5;
-		body.data.vipInfo.iconUrl = "https://imagev2.xmcdn.com/storages/2fd2-audiofreehighqps/93/C6/GKwRIDoF9MpUAAAP_AEhz-MP.png!op_type=0&magick=webp";
-		body.data.vipInfo.tip = "永久会员特权";
-		body.data.vipInfo.isVip = true;
+		body.data.vipInfo = {
+			"isVip": true,
+			"iconUrl": "https://imagev2.xmcdn.com/storages/2fd2-audiofreehighqps/93/C6/GKwRIDoF9MpUAAAP_AEhz-MP.png!op_type=0&magick=webp",
+			"jumpUrl": body.data.vipInfo.jumpUrl,
+			"levelJumpUrl": "https://pages.ximalaya.com/business-vip-level-h5-web/profile?orderSource=app_Other_MyPage_VipCard&utm_source=app_Other_MyPage_VipCard",
+			"status": 5,
+			"tip": "永久会员特权",
+			"level": 5,
+			"generalIconHeight": 63,
+			"generalIconWidth": 170
+		}
 		body.data.parentPaidStatus = "新用户";
 		body.data.childTag.isChild = true;
+		body.data.childTag.linkUrl = "https://m.ximalaya.com/gatekeeper/xmkp-xxm-h5/vip?ordersource=MyPageIcon";
 		body.data.vipExpireTime = 1861804800000;
 		body.data.isVip = true;
 		body.data.vipLevel = 5;
 		body.data.vipStatus = 5;
 		body.data.isEnglishVip = true;
-		body.data.parentPaidStatus = "永久会员";
-		body.data.serviceModule.entrances = body.data.serviceModule.entrances.filter(entrance => entrance.id === 210 || entrance.id === 215)//签到中心、全部服务
+		body.data.parentPaidStatus = "非临期会员";
+		body.data.serviceModule.entrances = body.data.serviceModule.entrances.filter(entrance => entranceId.includes(entrance.id))//签到中心、钱包、全部服务
 		break;
 	case "/mobile-playpage/track/v3/baseInfo": //单个音频
 		delete body.trackInfo.type;
@@ -87,6 +95,61 @@ switch (path) {
 	case "/mobile-playpage/playpage/recommend/resource/allocation": //播放页标签栏
 		body.data.recommendBarTab = body.data.recommendBarTab.filter(recommendBarTab => recommendBarTab.id !== 0) //过滤423特惠年卡广告
 		break;
+	case "/mobile-playpage/playpage/recommendContentV2": //播放页推荐详情
+		body.data.recommendElementList = body.data.recommendElementList.filter(recommendElementList => !recommendElementList.bizType.includes('AD'))
+		break;
+	case "/album/paid/info": //专辑付费信息
+		body.isPaid = false;
+		body.type = 0;
+		delete body.vipFreeType;
+		delete body.isVipFree;
+		delete body.priceTypeEnum;
+		delete body.isGoToAlbumPresalePage;
+		delete body.newPage;
+		delete body.priceTypeId;
+		break;
+	case "/business-vip-presale-mobile-web/page": //我的会员页
+		body.data.modules = body.data.modules.map(module => {
+			if(module.key === "userInfo"){
+				module.userInfo.userLevel.userLevel = 5;
+				module.userInfo.userLevel.userLevelIcon = "http://imagev2.xmcdn.com/storages/2fd2-audiofreehighqps/93/C6/GKwRIDoF9MpUAAAP_AEhz-MP.png";
+				module.userInfo.vipStatus = 2;
+				module.userInfo.subtitle = "永久会员";
+			}else if(module.key === "productAdsResource"){
+					module.vipStatus = 2;
+			}else if(module.key === "vipProducts"){
+					module.vipStatus = 2;
+					module.renewTips = "您是永久会员";
+			}else if(module.key === "jointVipProducts"){
+					module.vipStatus = 2;
+			}else if(module.key === "vipLevelPrivilege"){
+					module.vipStatus = 2;
+					module.userLevel = 5;
+					module.level = {
+						"title" : "会员等级",
+						"btnText" : "去升级",
+						"btnJumpUrl" : "https://m.ximalaya.com/gatekeeper/vip-grade?ts=1646193928#grow-tasks",
+						"progress" : {
+							"curLevel" : 5,
+							"nextLevel" : 6,
+							"curLevelPoint" : 25000,
+							"nextLevelPoint" : 88888,
+							"point" : 66666
+						}
+					};
+			}else if(module.key === "vipPrivileges"){
+					module.vipStatus = 2;
+			}
+			return module;
+		});
+		break;
+	case "/browsing-history-business/browsing/history/query": //我的--历史--浏览历史
+		body.data.list = body.data.list.map(list => { //list.type 1为有声书 2为直播（考虑去除）
+			delete list.albumSubscript;
+			list.paidAlbum = false;
+			return list;
+		});
+		break;
 	case "/discovery-feed/v1/freeListenTab/queryCardList": //底部免费页
 		body.sceneCards = body.sceneCards.map(sceneCards => {
 			sceneCards.data.body.map(body => {
@@ -137,6 +200,33 @@ switch (path) {
 				list.data = list.data.filter(data => !data.isAd)
 			})
 		})
+		break;
+	case "/hub/guideWordV3": //搜索推荐
+	case "/hub/hotWordV3": //搜索热词
+		body.hotWordList = [];
+		body.liveWordList && (body.liveWordList = []);
+		break;
+	case "/hub/hotWordBillboard/card": //搜索卡片
+		body.resultList = [];
+		break;
+	case "/nyx/history/query/detail": //上次播放记录
+		body.data.listenModels = body.data.listenModels.map(listenModel => {
+			delete listenModel.albumSubscript;
+			delete listenModel.isVipFree;
+			delete listenModel.vipFreeType;
+			delete listenModel.trackType;
+			listenModel.type = 1;
+			listenModel.paid = false;
+			listenModel.isPaid = false;
+			return listenModel;
+		});
+		break;
+	case "/nyx/history/query/id/list": //我的页播放历史
+		body.data.list = body.data.list.map(list => {
+			//list.modelId = Math.abs(list.modelId);
+			list.modelId = -list.modelId;
+			return list;
+		});
 		break;
 	case "/product/detail/v1/basicInfo/dynamic": //专辑详情页
 		const validTypes = ['live', 'calendar', 'relatedContent', 'creator'];
@@ -319,63 +409,6 @@ switch (path) {
 			delete item.vipFreeType;
 			return item;
 		});
-		break;
-	case "/nyx/history/query": //上次播放记录
-		body.data.listenModels = body.data.listenModels.map(listenModel => {
-			delete listenModel.albumSubscript;
-			delete listenModel.isVipFree;
-			delete listenModel.vipFreeType;
-			delete listenModel.trackType;
-			listenModel.type = 1;
-			listenModel.paid = false;
-			listenModel.isPaid = false;
-			return listenModel;
-		});
-		break;
-	case "/business-vip-presale-mobile-web/page": //我的会员页
-		body.data.modules = body.data.modules.map(module => {
-			if(module.key === "userInfo"){
-				module.userInfo.userLevel.userLevel = 5;
-				module.userInfo.userLevel.userLevelIcon = "http://imagev2.xmcdn.com/storages/2fd2-audiofreehighqps/93/C6/GKwRIDoF9MpUAAAP_AEhz-MP.png";
-				module.userInfo.vipStatus = 2;
-				module.userInfo.subtitle = "永久会员";
-			}else if(module.key === "productAdsResource"){
-					module.vipStatus = 2;
-			}else if(module.key === "vipProducts"){
-					module.vipStatus = 2;
-					module.renewTips = "永久会员";
-			}else if(module.key === "jointVipProducts"){
-					module.vipStatus = 2;
-			}else if(module.key === "vipLevelPrivilege"){
-					module.vipStatus = 2;
-					module.userLevel = 5;
-					module.level = {
-						"title" : "会员等级",
-						"btnText" : "去升级",
-						"btnJumpUrl" : "https://m.ximalaya.com/gatekeeper/vip-grade?ts=1646193928#grow-tasks",
-						"progress" : {
-							"curLevel" : 5,
-							"nextLevel" : 6,
-							"curLevelPoint" : 25000,
-							"nextLevelPoint" : 88888,
-							"point" : 66666
-						}
-					};
-			}else if(module.key === "vipPrivileges"){
-					module.vipStatus = 2;
-			}
-			return module;
-		});
-		break;
-	case "/album/paid/info": //专辑付费信息
-		body.isPaid = false;
-		body.type = 0;
-		delete body.vipFreeType;
-		delete body.isVipFree;
-		delete body.priceTypeEnum;
-		delete body.isGoToAlbumPresalePage;
-		delete body.newPage;
-		delete body.priceTypeId;
 		break;
 }
 $done({ body: JSON.stringify(body) });
