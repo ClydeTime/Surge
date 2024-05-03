@@ -49,7 +49,6 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 ^https?:\/\/passport(ws)?\.ximalaya\.com\/user-http-app\/v1\/token\/refresh - reject
 
 [Script]
-
 我的页会员去Ad = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/mobile-user\/v\d\/homePage,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 我的页浏览历史 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/browsing-history-business\/browsing\/history\/query,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
@@ -68,6 +67,8 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 
 免费页去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa|m)\.ximalaya\.com\/discovery-feed\/v\d\/freeListenTab\/queryCardList,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
+排行榜去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/discovery-ranking-web\/v\d\/ranking\/concreteRankList,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
 订阅页去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/subscribe\/v\d\/subscribe\/comprehensive\/rank,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 专辑详情页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/product\/detail\/v\d\/basicInfo\/dynamic,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
@@ -75,6 +76,14 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 记录去会员标志 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/mobile(hera)?\.ximalaya\.com\/nyx\/history\/query\/(detail|id\/list),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 导航会员页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/vip\/v\d\/recommand,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
+会员续费页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/m\.ximalaya\.com\/business-vip-presale-mobile-web\/page,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
+会员页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/m\.ximalaya\.com\/business-vip-level-h5-web\/api\/gift\/detail,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
+会员页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/m\.ximalaya\.com\/business-vip-level-h5-web\/api\/profile,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
+会员权益 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/m\.ximalaya\.com\/business-vip-welfare-mobile-web\/welfare\/module\/exclusive\/list,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 首页导航栏 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/discovery-category\/customCategories,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
@@ -85,6 +94,7 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 搜索推荐 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/search(wsa)?\.ximalaya\.com\/(hub\/)?(guideWordV\d|hotWord(V\d|Billboard\/card)),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 轮盘广告 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa)\.ximalaya\.com\/focus-mobile\/focusPic\/info,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+
 
 [MITM]
 hostname = %APPEND% *.ximalaya.com, 47.100.227.85, 61.164.145.12, 61.172.194.185, 61.172.194.186, 106.41.204.126, 112.80.180.72, 112.98.170.228, 112.99.146.108, 114.80.99.*, 118.25.119.177, 180.153.140.*, 180.153.250.*, 180.153.255.* 
