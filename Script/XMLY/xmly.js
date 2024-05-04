@@ -1,5 +1,5 @@
 const url = new URL($request.url);
-const PATH = url?.pathname, PATHs = url?.paths;
+const PATH = url?.pathname;
 let path = PATH.replace(/(\/|\/ts-)\d+(\.\d+)?/g, '');
 let body = JSON.parse($response.body);
 switch (path) {
@@ -28,20 +28,18 @@ switch (path) {
 		body.data.parentPaidStatus = "非临期会员";
 		body.data.serviceModule.entrances = body.data.serviceModule.entrances.filter(entrance => entranceId.includes(entrance.id))//签到中心、钱包、全部服务
 		break;
-	case "/mobile-playpage/track/v3/baseInfo": //单个音频
-		delete body.trackInfo.type;
-		delete body.trackInfo.relatedId;
-		delete body.trackInfo.authorizedType;
-		delete body.trackInfo.isVipFree;
-		delete body.trackInfo.vipFreeType;
-		delete body.trackInfo.hqNeedVip;
-		delete body.trackInfo.permissionExpireTime;
-		delete body.trackInfo.permissionSource;
-		body.trackInfo.isAntiLeech = false;
-		body.trackInfo.isPaid = false;
-		delete body.albumInfo.saleScope;
-		delete body.albumInfo.vipFreeType;
-		body.albumInfo.isPaid = false;
+	case "/mobile/playlist/album/new": //音频列表
+		body.data = body.data.map(data => {
+			data.isPaid = false;
+			delete data.price;
+			delete data.displayPrice;
+			delete data.displayDiscountedPrice;
+			delete data.discountedPrice;
+			delete data.isFree;
+			delete data.priceTypeId;
+			delete data.priceTypeEnum;
+			return data;
+		});
 		break;
 	case "/mobile-playpage/playpage/tabs/v2": //播放页
 		body.data.playpage.trackInfo.isPaid = false;
@@ -79,24 +77,39 @@ switch (path) {
 		body.data.playpage.talkBindings = [];
 		body.data.playpage.yellowZone = {}; 
 		break;
-	case "/mobile/playlist/album/new": //音频列表
-		body.data = body.data.map(data => {
-			data.isPaid = false;
-			delete data.price;
-			delete data.displayPrice;
-			delete data.displayDiscountedPrice;
-			delete data.discountedPrice;
-			delete data.isFree;
-			delete data.priceTypeId;
-			delete data.priceTypeEnum;
-			return data;
-		});
-		break;
 	case "/mobile-playpage/playpage/recommend/resource/allocation": //播放页标签栏
 		body.data.recommendBarTab = body.data.recommendBarTab.filter(recommendBarTab => recommendBarTab.id !== 0) //过滤423特惠年卡广告
 		break;
 	case "/mobile-playpage/playpage/recommendContentV2": //播放页推荐详情
 		body.data.recommendElementList = body.data.recommendElementList.filter(recommendElementList => !recommendElementList.bizType.includes('AD'))
+		break;
+	case "/mobile-playpage/track/v3/baseInfo": //单个音频
+		delete body.trackInfo.type;
+		delete body.trackInfo.relatedId;
+		delete body.trackInfo.authorizedType;
+		delete body.trackInfo.isVipFree;
+		delete body.trackInfo.vipFreeType;
+		delete body.trackInfo.hqNeedVip;
+		delete body.trackInfo.permissionExpireTime;
+		delete body.trackInfo.permissionSource;
+		body.trackInfo.isAntiLeech = false;
+		body.trackInfo.isPaid = false;
+		delete body.albumInfo.saleScope;
+		delete body.albumInfo.vipFreeType;
+		body.albumInfo.isPaid = false;
+		break;
+	case "/mobile/v1/album/track": //专辑页音频列表
+		body.data.list = body.data.list.map(list => {
+			list.isPaid = false;
+			delete list.price;
+			delete list.displayPrice;
+			delete list.displayDiscountedPrice;
+			delete list.discountedPrice;
+			delete list.isFree;
+			delete list.priceTypeId;
+			delete list.priceTypeEnum;
+			return list;
+		});
 		break;
 	case "/album/paid/info": //专辑付费信息
 		body.isPaid = false;
