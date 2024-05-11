@@ -49,7 +49,7 @@ DOMAIN,gslbtx.ximalaya.com,REJECT
 ^https?:\/\/passport(ws)?\.ximalaya\.com\/user-http-app\/v1\/token\/refresh - reject
 
 [Script]
-专辑音频 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa|m)\.ximalaya\.com\/mobile(-user\/v\d\/homePage|-playpage\/(track\/v\d\/baseInfo|playpage\/(tabs\/v\d|recommend(\/resource\/allocation|ContentV\d)))|\/(album\/paid\/info|playlist\/album\/new)),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
+专辑音频 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa|m)\.ximalaya\.com\/mobile(-user\/v\d\/homePage|-playpage\/(track\/v\d\/baseInfo|playpage\/(tabs\/v\d|recommend(\/resource\/allocation|ContentV\d)))|\/(album\/paid\/info|playlist\/album\/new)|\/v\d\/album\/track),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
 会员页 = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/(mobile(hera)?|m(ob)?wsa|m)\.ximalaya\.com\/business-vip-(presale-mobile-web\/page|level-h5-web\/api\/(gift\/detail|profile)|welfare-mobile-web\/welfare\/module\/exclusive\/list),script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/XMLY/xmly.js
 
