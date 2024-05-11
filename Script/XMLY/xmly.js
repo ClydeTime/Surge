@@ -111,7 +111,7 @@ switch (path) {
 			return list;
 		});
 		break;
-	case "/album/paid/info": //专辑付费信息
+	case "/mobile/album/paid/info": //专辑付费信息
 		body.isPaid = false;
 		body.type = 0;
 		delete body.vipFreeType;
