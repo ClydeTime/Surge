@@ -323,7 +323,6 @@ switch (path) {
 		break;
 	case "/nyx/history/query/id/list": //我的页播放历史
 		body.data.list = body.data.list.map(list => {
-			//list.modelId = Math.abs(list.modelId);
 			list.modelId = -list.modelId;
 			return list;
 		});
