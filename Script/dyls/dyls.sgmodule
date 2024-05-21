@@ -22,4 +22,4 @@ DOMAIN,647bc185.szrtcpa.com,REJECT
 首页去Ad = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/app-v1\.ecoliving168\.com\/api\/v\d\/movie\/index_recommend,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/dyls/dyls.js
 
 [MITM]
-app-v1.ecoliving168.com
+hostname = %APPEND% app-v1.ecoliving168.com
