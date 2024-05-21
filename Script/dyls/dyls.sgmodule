@@ -1,0 +1,22 @@
+#!name=电影猎手去广告
+#!desc=无法完全去除
+#!update= 2024-05-21
+#!author= MartinsKing
+#!category= MK
+
+[Rule]
+DOMAIN,647bc185.szrtcpa.com,REJECT
+
+[URL Rewrite]
+^https?:\/\/app-v1\.ecoliving168\.com\/api\/v\d\/advert\/config - reject
+^https?:\/\/app-v1\.ecoliving168\.com\/api\/v\d\/app\/config - reject
+# 去除升级提示
+^https?:\/\/app-v1\.ecoliving168\.com\/api\/v\d\/app\/check_update - reject
+^https?:\/\/mdisk.oss-cn-hangzhou\.aliyuncs\.com\/domain_v5\.json - reject
+^https?:\/\/bgg\.baidu\.com\/bgg\/produce - reject
+
+[Map Local]
+^https?:\/\/df-common-files\.s\d\.ap-southeast-\d\.amazonaws\.com\/files\/domain_v5\.json data="https://raw.githubusercontent.com/mieqq/mieqq/master/reject-dict.json"
+
+[Script]
+首页去Ad = type=http-response,requires-body=1,max-size=0,pattern=^https?:\/\/app-v1\.ecoliving168\.com\/api\/v\d\/movie\/index_recommend,script-path=https://raw.githubusercontent.com/ClydeTime/Surge/main/Script/dyls/dyls.js
