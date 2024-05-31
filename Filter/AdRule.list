@@ -2602,7 +2602,6 @@ DOMAIN,dns.jd.com
 DOMAIN,xlog.jd.com
 DOMAIN,dsp-x.jd.com
 IP-CIDR,101.124.19.122/32
-IP6-CIDR,2402:db40:5100:1011::5/128
 # JavDB
 DOMAIN,api.liquidlink.cn
 
