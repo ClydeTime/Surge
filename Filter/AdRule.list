@@ -2384,7 +2384,7 @@ DOMAIN,tnc3-aliec2.snssdk.com
 
 DOMAIN,p6-ad-sign.byteimg.com
 DOMAIN,p9-ad-sign.byteimg.com
-DOMAIN,lf-cdn-tos.bytescm.com
+#DOMAIN,lf-cdn-tos.bytescm.com
 DOMAIN,lf1-cdn-tos.bytegoofy.com
 
 DOMAIN,bsync3-normal-lq.zijieapi.com
