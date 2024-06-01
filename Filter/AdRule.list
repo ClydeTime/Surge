@@ -2407,8 +2407,8 @@ DOMAIN,mssdk.volces.com
 DOMAIN,feedback-c.zijieapi.com
 DOMAIN,ad.zijieapi.com
 
-DOMAIN,p3-webcast.douyinpic.com
-DOMAIN,p11-webcast.douyinpic.com
+#DOMAIN,p3-webcast.douyinpic.com
+#DOMAIN,p11-webcast.douyinpic.com
 DOMAIN,p3-webcast-sign.douyinpic.com
 DOMAIN,p6-webcast-sign.douyinpic.com
 DOMAIN,p9-webcast-sign.douyinpic.com
