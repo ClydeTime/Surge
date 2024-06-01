@@ -19,7 +19,7 @@ DOMAIN-SUFFIX,6boou.voluumtrk.com
 DOMAIN-SUFFIX,73.sinawap.com
 DOMAIN-SUFFIX,XiaoQiang
 DOMAIN-SUFFIX,a.ads1.msn.com
-DOMAIN-SUFFIX,a.ads2.msn.com
+DOMAIN-SUFFIX,a.ads2.msn.com=
 DOMAIN-SUFFIX,a.beilamusi.com
 DOMAIN-SUFFIX,a.benshiw.net
 DOMAIN-SUFFIX,a.dianjoy.com
@@ -2441,9 +2441,9 @@ DOMAIN,ec3-core-lq.ecombdapi.com
 DOMAIN,ec5-core-lq.ecombdapi.com
 DOMAIN,ecom3-normal-lq.ecombdapi.com
 DOMAIN,ecom5-normal-lq.ecombdapi.com
-DOMAIN,p3-aio.ecombdimg.com
-DOMAIN,p6-aio.ecombdimg.com
-DOMAIN,p9-aio.ecombdimg.com
+#DOMAIN,p3-aio.ecombdimg.com
+#DOMAIN,p6-aio.ecombdimg.com
+#DOMAIN,p9-aio.ecombdimg.com
 
 DOMAIN,plbslog.umeng.com
 DOMAIN,utoken.umeng.com
