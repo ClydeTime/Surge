@@ -28,6 +28,34 @@ switch (path) {
 		body.data.parentPaidStatus = "非临期会员";
 		body.data.serviceModule.entrances = body.data.serviceModule.entrances.filter(entrance => entranceId.includes(entrance.id))//签到中心、钱包、全部服务
 		break;
+	case "/mobile-user-grade/decorator/listAvatarFrame": //会员头像框
+		body.data = body.data.map(data => {
+			data.receiveStatus = 1;
+			data.category = 1;
+			data.categoryRequire = null;
+			data.intro = "免费佩戴";
+			data.obtainDesc = null;
+			data.jumpUrl = null;
+			data.jumpTitle = "免费佩戴";
+			return data;
+		});
+		break;
+	case "/mobile-user-grade/decorator/listCommentSkins": //会员背景
+		body.data = body.data.map(data => {
+			data.receiveStatus = 1;
+			data.category = 1;
+			data.categoryRequire = null;
+			data.intro = "免费佩戴";
+			data.obtainDesc = null;
+			data.jumpUrl = null;
+			data.jumpTitle = "免费佩戴";
+			return data;
+		});
+		break;
+	case "/mobile-user-grade/decorator/useRight": //会员请求确认
+		body.ret = 0;
+		body.msg = "请求成功";
+		break;
 	case "/mobile/playlist/album/new": //音频列表
 		body.data = body.data.map(data => {
 			data.isPaid = false;
