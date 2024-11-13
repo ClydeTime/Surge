@@ -210,7 +210,7 @@ function main() {
 // 领取奖励
 async function getGift() {
   let opt = {
-    url: `https://yunbusiness.ccb.com/clp_coupon/txCtrl?txcode=A3341C082`,
+    url: `https://yunbusiness.ccb.com/clp_coupon/txCtrl?txcode=A3341C120`,
     headers: {
       "MID": $.info?.MID,
       "Content-Type": "application/json;charset=utf-8",
