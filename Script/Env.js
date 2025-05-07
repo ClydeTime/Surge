@@ -2,7 +2,7 @@ function Env(name, opts) {
 	return new (class {
 		constructor(name, opts) {
 			this.name = name
-			this.version = '1.7.4'
+			this.version = '1.7.5'
 			this.data = null
 			this.logs = []
 			this.isMute = false
@@ -429,20 +429,21 @@ function Env(name, opts) {
 									if (copy) {
 										Object.assign(options, { action: 'clipboard', text: copy })
 									}
-			
-									if ($media) {
-										let mediaUrl = undefined
+
+									// 图片通知
+									let mediaUrl = rawopts.mediaUrl || rawopts['media-url'] || $media
+									if (mediaUrl) {
 										let media = undefined
 										let mime = undefined
 										// http 开头的网络地址
-										if ($media.startsWith('http')) {
-											mediaUrl = $media
+										if (mediaUrl.startsWith('http')) {
+											//不做任何操作
 										}
 										// 带标识的 Base64 字符串
 										// data:image/png;base64,iVBORw0KGgo...
-										else if ($media.startsWith('data:')) {
-											const [data] = $media.split(';')
-											const [, base64str] = $media.split(',')
+										else if (mediaUrl.startsWith('data:')) {
+											const [data] = mediaUrl.split(';')
+											const [, base64str] = mediaUrl.split(',')
 											media = base64str
 											mime = data.replace('data:', '')
 										}
@@ -465,8 +466,8 @@ function Env(name, opts) {
 												}
 												return null
 											}
-											media = $media
-											mime = getMimeFromBase64($media)
+											media = mediaUrl
+											mime = getMimeFromBase64(mediaUrl)
 										}
 			
 										Object.assign(options, {
@@ -488,9 +489,8 @@ function Env(name, opts) {
 								let openUrl =
 									rawopts.openUrl || rawopts.url || rawopts['open-url'] || $open
 								if (openUrl) Object.assign(options, { openUrl })
-		
-								let mediaUrl = rawopts.mediaUrl || rawopts['media-url']
-								if ($media?.startsWith('http')) mediaUrl = $media
+								
+								let mediaUrl = rawopts.mediaUrl || rawopts['media-url'] || $media
 								if (mediaUrl) Object.assign(options, { mediaUrl })
 		
 								console.log(JSON.stringify(options))
@@ -503,8 +503,7 @@ function Env(name, opts) {
 									rawopts['open-url'] || rawopts.url || rawopts.openUrl || $open
 								if (openUrl) Object.assign(options, { 'open-url': openUrl })
 		
-								let mediaUrl = rawopts['media-url'] || rawopts.mediaUrl
-								if ($media?.startsWith('http')) mediaUrl = $media
+								let mediaUrl = rawopts.mediaUrl || rawopts['media-url'] || $media
 								if (mediaUrl) Object.assign(options, { 'media-url': mediaUrl })
 		
 								let copy =
