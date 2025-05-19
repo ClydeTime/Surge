@@ -374,7 +374,7 @@ function Env(name, opts) {
 		/**
 		 * 系统通知
 		 *
-		 * > 通知参数: 同时支持 QuanX 和 Loon 两种格式, EnvJs根据运行环境自动转换, Surge 环境不支持多媒体通知
+		 * > 通知参数: 同时支持 QuanX 和 Loon 两种格式, EnvJs根据运行环境自动转换
 		 *
 		 * 示例:
 		 * $.msg(title, subt, desc, 'twitter://')
@@ -492,8 +492,11 @@ function Env(name, opts) {
 								
 								let mediaUrl = rawopts.mediaUrl || rawopts['media-url'] || $media
 								if (mediaUrl) Object.assign(options, { mediaUrl })
-		
-								console.log(JSON.stringify(options))
+								let copy =
+									rawopts['update-pasteboard'] ||
+									rawopts.updatePasteboard ||
+									$copy
+								if (copy) Object.assign(options, { 'clipboard': copy })
 								return options
 							}
 							case 'Quantumult X': {
@@ -511,8 +514,6 @@ function Env(name, opts) {
 									rawopts.updatePasteboard ||
 									$copy
 								if (copy) Object.assign(options, { 'update-pasteboard': copy })
-		
-								console.log(JSON.stringify(options))
 								return options
 							}
 						}
